@@ -77,7 +77,7 @@
       speed: 8, // the speed at which the solution path with be drawn
       width: 3 // the width of the solution path in pixels
     },
-    // The door identifier for the default starting point
+    // The point identifier for the default starting point
     'startpoint': function () {
       return 'startpoint';
     },
@@ -144,8 +144,8 @@
    * @property {float} y on the first end of the path the y coord
    * @property {float} m on the second end of the path the x coord
    * @property {float} n on the second end of the path the y coord
-   * @property {string[]} d an array of doors that connect to the first end of the path
-   * @property {string[]} e an array of doors that connect to the second end of the path
+   * @property {string[]} d an array of points that connect to the first end of the path
+   * @property {string[]} e an array of points that connect to the second end of the path
    * @property {string[]} c array of connections to other paths
    * @property {string[]} q array of connections to portals
    * @property {string} o prior path type "pa" or "po"
@@ -336,7 +336,7 @@
     // Extract data from the svg maps
     function buildDataStore(mapNum, map, el) {
       var path,
-        doorId,
+        pointId,
         x1,
         y1,
         x2,
@@ -369,19 +369,19 @@
         dataStore.p[mapNum].push(path);
       });
 
-      // Doors and starting points
+      // Points
       // roomId or POI_Id
 
       $('#Points circle', el).each(function () { // index, line
         x1 = $(this).attr('cx');
         y1 = $(this).attr('cy');
-        doorId = $(this).attr('id');
+        pointId = $(this).attr('id');
 
         $.each(dataStore.p[mapNum], function (index, segment) {
           if (map.id === segment.floor && ((segment.x === x1 && segment.y === y1))) {
-            segment.d.push(doorId);
+            segment.d.push(pointId);
           } else if (map.id === segment.floor && ((segment.m === x1 && segment.n === y1))) {
-            segment.e.push(doorId);
+            segment.e.push(pointId);
           }
         });
 
@@ -540,35 +540,35 @@
 
     } // end function buildportals
 
-    //get the set of paths adjacent to a door or endpoint.
-    function getDoorPaths(door) {
+    //get the set of paths adjacent to a point or endpoint.
+    function getPointPaths(point) {
       var mapNum,
         pathNum,
-        doorANum,
-        doorBNum,
-        doorPaths = {
+        pointANum,
+        pointBNum,
+        pointPaths = {
           'paths': [],
           'floor': null
         };
 
       for (mapNum = 0; mapNum < maps.length; mapNum++) {
         for (pathNum = 0; pathNum < dataStore.p[mapNum].length; pathNum++) {
-          for (doorANum = 0; doorANum < dataStore.p[mapNum][pathNum].d.length; doorANum++) {
-            if (dataStore.p[mapNum][pathNum].d[doorANum] === door) {
-              doorPaths.paths.push(pathNum); // only pushing pathNum because starting on a single floor
-              doorPaths.floor = dataStore.p[mapNum][pathNum].floor;
+          for (pointANum = 0; pointANum < dataStore.p[mapNum][pathNum].d.length; pointANum++) {
+            if (dataStore.p[mapNum][pathNum].d[pointANum] === point) {
+              pointPaths.paths.push(pathNum); // only pushing pathNum because starting on a single floor
+              pointPaths.floor = dataStore.p[mapNum][pathNum].floor;
             }
           }
-          for (doorBNum = 0; doorBNum < dataStore.p[mapNum][pathNum].e.length; doorBNum++) {
-            if (dataStore.p[mapNum][pathNum].e[doorBNum] === door) {
-              doorPaths.paths.push(pathNum); // only pushing pathNum because starting on a single floor
-              doorPaths.floor = dataStore.p[mapNum][pathNum].floor;
+          for (pointBNum = 0; pointBNum < dataStore.p[mapNum][pathNum].e.length; pointBNum++) {
+            if (dataStore.p[mapNum][pathNum].e[pointBNum] === point) {
+              pointPaths.paths.push(pathNum); // only pushing pathNum because starting on a single floor
+              pointPaths.floor = dataStore.p[mapNum][pathNum].floor;
             }
           }
         }
       }
 
-      return doorPaths;
+      return pointPaths;
     }
 
     function recursiveSearch(segmentType, segmentFloor, segment, length) {
@@ -630,7 +630,7 @@
         mapNum,
         sourcemapNum;
 
-      sourceInfo = getDoorPaths(startpoint);
+      sourceInfo = getPointPaths(startpoint);
 
       for (mapNum = 0; mapNum < maps.length; mapNum++) {
         if (maps[mapNum].id === sourceInfo.floor) {
@@ -641,7 +641,7 @@
 
       $.each(sourceInfo.paths, function (i, pathId) {
         dataStore.p[sourcemapNum][pathId].r = dataStore.p[sourcemapNum][pathId].l;
-        dataStore.p[sourcemapNum][pathId].p = 'door';
+        dataStore.p[sourcemapNum][pathId].p = 'point';
         recursiveSearch('pa', sourcemapNum, pathId, dataStore.p[sourcemapNum][pathId].l);
       });
     }
@@ -652,7 +652,7 @@
       var step;
 
       // if we aren't at the startpoint point
-      if (segment !== 'door') {
+      if (segment !== 'point') {
         step = {};
         step.type = segmentType;
         step.floor = segmentFloor;
@@ -679,7 +679,7 @@
         minPath,
         i;
 
-      destInfo = getDoorPaths(options.endpoint);
+      destInfo = getPointPaths(options.endpoint);
 
       for (mapNum = 0; mapNum < maps.length; mapNum++) {
         if (maps[mapNum].id === destInfo.floor) {
@@ -930,9 +930,9 @@
       // Hide route information
       $('#Paths line', svgDiv).attr('stroke-opacity', 0);
       $('#Points circle', svgDiv).attr('fill-opacity', 0);
-      $('#Portals line', svgDiv).attr('stroke-opacity', 0);
+      $('#Portals circle', svgDiv).attr('fill-opacity', 0);
 
-      // If #Paths, #Doors, etc. are in a group, ensure that group does _not_
+      // If #Paths, #Points, etc. are in a group, ensure that group does _not_
       // have display: none; (commonly set by Illustrator when hiding a layer)
       // and instead add opacity: 0; (which allows for events, unlike display: none;)
       // (A group tag 'g' is used by Illustrator for layers.)
@@ -1273,7 +1273,7 @@
             return;
           }
 
-          //if statement incorrectly assumes one door at the end of the path, works in that case, need to generalize
+          //if statement incorrectly assumes one point at the end of the path, works in that case, need to generalize
           if (dataStore.p[solution[0].floor][solution[0].segment].d[0] === startpoint) {
             draw = {};
             draw.floor = solution[0].floor;
@@ -1632,7 +1632,7 @@
            * @name routeTo
            * @public
            * @memberOf wayfinding
-           * @example $('target').wayfinding('routeTo', 'doorID');
+           * @example $('target').wayfinding('routeTo', 'pointID');
            */
           case 'routeTo':
             // call method
@@ -1655,7 +1655,7 @@
           /**
            * @function startpoint
            * @memberOf wayfinding
-           * @param {string} newStartPoint a door ID specifying a new starting location
+           * @param {string} newStartPoint a point ID specifying a new starting location
            * @param {function} [callback]
            * @example $('target').wayfinding('startpoint', 'R1001');
            */
@@ -1663,7 +1663,7 @@
           /**
            * @function startpoint
            * @memberOf wayfinding
-           * @param {function} newStartPointFunction a door ID specifying a new starting location
+           * @param {function} newStartPointFunction a point ID specifying a new starting location
            * @param {function} [callback]
            * @example $('target').wayfinding('startpoint', startpointFunction);
            */
