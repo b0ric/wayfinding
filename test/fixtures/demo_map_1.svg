@@ -125,25 +125,25 @@
 	<line id="Elev.1.floor2" fill="none" stroke="#FF00FF" x1="297" y1="237" x2="315" y2="255"/>
 	<line id="Stair.1.floor2" fill="none" stroke="#FF00FF" x1="297" y1="273" x2="288" y2="273"/>
 </g>
-<g id="Doors">
-	<line id="lobby" fill="none" stroke="#00FF00" x1="297" y1="408" x2="306" y2="417"/>
-	<line id="R121_1_" fill="none" stroke="#00FF00" x1="117" y1="156" x2="126" y2="165"/>
-	<line id="R122_1_" fill="none" stroke="#00FF00" x1="207" y1="120" x2="198" y2="129"/>
-	<line id="R123_4_" fill="none" stroke="#00FF00" x1="270" y1="120" x2="279" y2="129"/>
-	<line id="R123_3_" fill="none" stroke="#00FF00" x1="270" y1="174" x2="279" y2="165"/>
-	<line id="R123_2_" fill="none" stroke="#00FF00" x1="333" y1="120" x2="324" y2="129"/>
-	<line id="R123_1_" fill="none" stroke="#00FF00" x1="333" y1="174" x2="324" y2="165"/>
-	<line id="R104_1_" fill="none" stroke="#00FF00" x1="243" y1="327" x2="234" y2="318"/>
-	<line id="R103_1_" fill="none" stroke="#00FF00" x1="243" y1="255" x2="234" y2="246"/>
-	<line id="R112_1_" fill="none" stroke="#00FF00" x1="360" y1="273" x2="369" y2="282"/>
-	<line id="R111_1_" fill="none" stroke="#00FF00" x1="360" y1="345" x2="369" y2="354"/>
-	<line id="R102_1_" fill="none" stroke="#00FF00" x1="117" y1="273" x2="126" y2="282"/>
-	<line id="R101_1_" fill="none" stroke="#00FF00" x1="117" y1="345" x2="126" y2="354"/>
-	<line id="R113_1_" fill="none" stroke="#00FF00" x1="486" y1="255" x2="477" y2="246"/>
-	<line id="R114_1_" fill="none" stroke="#00FF00" x1="486" y1="327" x2="477" y2="318"/>
-	<line id="R125_1_" fill="none" stroke="#00FF00" x1="486" y1="138" x2="477" y2="129"/>
-	<line id="R124_1_" fill="none" stroke="#00FF00" x1="378" y1="120" x2="369" y2="129"/>
-	<line id="lcd.1" fill="none" stroke="#00FF00" x1="297" y1="354" x2="288" y2="363"/>
+<g id="Points">
+	<circle id="lobby" stroke="#00FF00" cx="297" cy="408" r="2"/>
+	<circle id="R121_1_" stroke="#00FF00" cx="117" cy="156" r="2"/>
+	<circle id="R122_1_" stroke="#00FF00" cx="207" cy="120" r="2"/>
+	<circle id="R123_4_" stroke="#00FF00" cx="270" cy="120" r="2"/>
+	<circle id="R123_3_" stroke="#00FF00" cx="270" cy="174" r="2"/>
+	<circle id="R123_2_" stroke="#00FF00" cx="333" cy="120" r="2"/>
+	<circle id="R123_1_" stroke="#00FF00" cx="333" cy="174" r="2"/>
+	<circle id="R104_1_" stroke="#00FF00" cx="243" cy="327" r="2"/>
+	<circle id="R103_1_" stroke="#00FF00" cx="243" cy="255" r="2"/>
+	<circle id="R112_1_" stroke="#00FF00" cx="360" cy="273" r="2"/>
+	<circle id="R111_1_" stroke="#00FF00" cx="360" cy="345" r="2"/>
+	<circle id="R102_1_" stroke="#00FF00" cx="117" cy="273" r="2"/>
+	<circle id="R101_1_" stroke="#00FF00" cx="117" cy="345" r="2"/>
+	<circle id="R113_1_" stroke="#00FF00" cx="486" cy="255" r="2"/>
+	<circle id="R114_1_" stroke="#00FF00" cx="486" cy="327" r="2"/>
+	<circle id="R125_1_" stroke="#00FF00" cx="486" cy="138" r="2"/>
+	<circle id="R124_1_" stroke="#00FF00" cx="378" cy="120" r="2"/>
+	<circle id="lcd.1" stroke="#00FF00" cx="297" cy="354" r="2"/>
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="273" x2="315" y2="273"/>

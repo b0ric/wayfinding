@@ -372,17 +372,15 @@
       // Doors and starting points
       // roomId or POI_Id
 
-      $('#Doors line', el).each(function () { // index, line
-        x1 = $(this).attr('x1');
-        y1 = $(this).attr('y1');
-        x2 = $(this).attr('x2');
-        y2 = $(this).attr('y2');
+      $('#Points circle', el).each(function () { // index, line
+        x1 = $(this).attr('cx');
+        y1 = $(this).attr('cy');
         doorId = $(this).attr('id');
 
         $.each(dataStore.p[mapNum], function (index, segment) {
-          if (map.id === segment.floor && ((segment.x === x1 && segment.y === y1) || (segment.x === x2 && segment.y === y2))) {
+          if (map.id === segment.floor && ((segment.x === x1 && segment.y === y1))) {
             segment.d.push(doorId);
-          } else if (map.id === segment.floor && ((segment.m === x1 && segment.n === y1) || (segment.m === x2 && segment.n === y2))) {
+          } else if (map.id === segment.floor && ((segment.m === x1 && segment.n === y1))) {
             segment.e.push(doorId);
           }
         });
@@ -569,6 +567,7 @@
           }
         }
       }
+
       return doorPaths;
     }
 
@@ -793,16 +792,15 @@
 
       if (options.showLocation) {
 
-        start = $('#Doors #' + escapeSelector(startpoint), el);
+        start = $('#Points #' + escapeSelector(startpoint), el);
 
         var startMap = el.children().has($('#' + escapeSelector(startpoint)));
 
         attachPinLocation = $('svg', startMap).children().last();
 
         if (start.length) {
-          x = (Number(start.attr('x1')) + Number(start.attr('x2'))) / 2;
-          y = (Number(start.attr('y1')) + Number(start.attr('y2'))) / 2;
-
+          x = (Number(start.attr('cx')));
+          y = (Number(start.attr('cy')));
           pin = makePin(x, y, 'startPin');
 
           attachPinLocation.after(pin);
@@ -823,12 +821,12 @@
       $('g.destinationPin', el).remove();
 
       if (options.showLocation) {
-        end = $('#Doors #' + escapeSelector(endPoint), el);
+        end = $('#Points #' + escapeSelector(endPoint), el);
 
         attachPinLocation = $('svg').has('#Rooms a[id="' + escapeSelector(endPoint) + '"]');
         if (end.length) {
-          x = (Number(end.attr('x1')) + Number(end.attr('x2'))) / 2;
-          y = (Number(end.attr('y1')) + Number(end.attr('y2'))) / 2;
+          x = (Number(end.attr('cx')));
+          y = (Number(end.attr('cy')));
 
           pin = makePin(x, y, 'destinationPin');
 
@@ -900,7 +898,7 @@
       .attr('preserveAspectRatio', 'xMinYMin meet');
 
       // clean up after illustrator -> svg issues
-      $('#Rooms a, #Doors line', el).each(function () {
+      $('#Rooms a, #Points circle', el).each(function () {
         if ($(this).prop('id') && $(this).prop('id').indexOf('_') > 0) {
           var oldID = $(this).prop('id');
           $(this).prop('id', oldID.slice(0, oldID.indexOf('_')));
@@ -931,7 +929,7 @@
 
       // Hide route information
       $('#Paths line', svgDiv).attr('stroke-opacity', 0);
-      $('#Doors line', svgDiv).attr('stroke-opacity', 0);
+      $('#Points circle', svgDiv).attr('stroke-opacity', 0);
       $('#Portals line', svgDiv).attr('stroke-opacity', 0);
 
       // If #Paths, #Doors, etc. are in a group, ensure that group does _not_
