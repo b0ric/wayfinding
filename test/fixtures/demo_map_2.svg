@@ -56,8 +56,8 @@
 	<line id="Stair.1.floor1" fill="none" stroke="#FF00FF" x1="315" y1="273" x2="306" y2="273"/>
 </g>
 <g id="Doors">
-	<circle id="R201_1_" stroke="#00FF00" cx="297" cy="408" r="2"/>
-	<circle id="R202_1_" stroke="#00FF00" cx="504" cy="111" r="2"/>
+	<circle id="R201_1_" cx="297" cy="408" r="2"/>
+	<circle id="R202_1_" cx="504" cy="111" r="2"/>
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>

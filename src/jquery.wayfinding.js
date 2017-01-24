@@ -929,7 +929,7 @@
 
       // Hide route information
       $('#Paths line', svgDiv).attr('stroke-opacity', 0);
-      $('#Points circle', svgDiv).attr('stroke-opacity', 0);
+      $('#Points circle', svgDiv).attr('fill-opacity', 0);
       $('#Portals line', svgDiv).attr('stroke-opacity', 0);
 
       // If #Paths, #Doors, etc. are in a group, ensure that group does _not_
