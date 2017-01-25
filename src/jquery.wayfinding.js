@@ -433,8 +433,12 @@
         mapNum,
         pathOuterNum,
         pathInnerNum,
+        currentInnerPath,
+        currentOuterPath,
         portalNum,
-        pathNum;
+        pathNum,
+        currentPortal,
+        currentPath;
 
       for (segmentOuterNum = 0; segmentOuterNum < portalSegments.length; segmentOuterNum++) {
         outerSegment = portalSegments[segmentOuterNum];
@@ -482,19 +486,17 @@
       for (mapNum = 0; mapNum < maps.length; mapNum++) {
         for (pathOuterNum = 0; pathOuterNum < dataStore.p[mapNum].length - 1; pathOuterNum++) {
           for (pathInnerNum = pathOuterNum + 1; pathInnerNum < dataStore.p[mapNum].length; pathInnerNum++) {
+            currentInnerPath = dataStore.p[mapNum][pathInnerNum];
+            currentOuterPath = dataStore.p[mapNum][pathOuterNum];
             if (
-              (dataStore.p[mapNum][pathInnerNum].x === dataStore.p[mapNum][pathOuterNum].x &&
-              dataStore.p[mapNum][pathInnerNum].y === dataStore.p[mapNum][pathOuterNum].y) ||
-              (dataStore.p[mapNum][pathInnerNum].m === dataStore.p[mapNum][pathOuterNum].x &&
-              dataStore.p[mapNum][pathInnerNum].n === dataStore.p[mapNum][pathOuterNum].y) ||
-              (dataStore.p[mapNum][pathInnerNum].x === dataStore.p[mapNum][pathOuterNum].m &&
-              dataStore.p[mapNum][pathInnerNum].y === dataStore.p[mapNum][pathOuterNum].n) ||
-              (dataStore.p[mapNum][pathInnerNum].m === dataStore.p[mapNum][pathOuterNum].m &&
-              dataStore.p[mapNum][pathInnerNum].n === dataStore.p[mapNum][pathOuterNum].n)
+              (currentInnerPath.x === currentOuterPath.x && currentInnerPath.y === currentOuterPath.y) ||
+              (currentInnerPath.m === currentOuterPath.x && currentInnerPath.n === currentOuterPath.y) ||
+              (currentInnerPath.x === currentOuterPath.m && currentInnerPath.y === currentOuterPath.n) ||
+              (currentInnerPath.m === currentOuterPath.m && currentInnerPath.n === currentOuterPath.n)
             ) {
               // push onto connections
-              dataStore.p[mapNum][pathOuterNum].c.push(pathInnerNum);
-              dataStore.p[mapNum][pathInnerNum].c.push(pathOuterNum);
+              currentOuterPath.c.push(pathInnerNum);
+              currentInnerPath.c.push(pathOuterNum);
             }
           }
         }
@@ -504,20 +506,23 @@
       for (portalNum = 0; portalNum < dataStore.q.length; portalNum++) {
         for (mapNum = 0; mapNum < maps.length; mapNum++) {
           for (pathNum = 0; pathNum < dataStore.p[mapNum].length; pathNum++) {
-            if (dataStore.q[portalNum].f === dataStore.p[mapNum][pathNum].floor &&
-              ((dataStore.q[portalNum].x === dataStore.p[mapNum][pathNum].x &&
-              dataStore.q[portalNum].y === dataStore.p[mapNum][pathNum].y) ||
-              (dataStore.q[portalNum].x === dataStore.p[mapNum][pathNum].m &&
-              dataStore.q[portalNum].y === dataStore.p[mapNum][pathNum].n))) {
-              dataStore.q[portalNum].c.push(pathNum);
-              dataStore.p[mapNum][pathNum].q.push(portalNum);
-            } else if (dataStore.q[portalNum].j === dataStore.p[mapNum][pathNum].floor &&
-              ((dataStore.q[portalNum].m === dataStore.p[mapNum][pathNum].x &&
-              dataStore.q[portalNum].n === dataStore.p[mapNum][pathNum].y) ||
-              (dataStore.q[portalNum].m === dataStore.p[mapNum][pathNum].m &&
-              dataStore.q[portalNum].n === dataStore.p[mapNum][pathNum].n))) {
-              dataStore.q[portalNum].d.push(pathNum);
-              dataStore.p[mapNum][pathNum].q.push(portalNum);
+            currentPortal = dataStore.q[portalNum];
+            currentPath = dataStore.p[mapNum][pathNum];
+            if (
+              currentPortal.f === currentPath.floor &&
+              ((currentPortal.x === currentPath.x && currentPortal.y === currentPath.y) ||
+              (currentPortal.x === currentPath.m && currentPortal.y === currentPath.n))
+            ) {
+              currentPortal.c.push(pathNum);
+              currentPath.q.push(portalNum);
+            }
+            else if (
+              currentPortal.j === currentPath.floor &&
+              ((currentPortal.m === currentPath.x && currentPortal.n === currentPath.y) ||
+              (currentPortal.m === currentPath.m && currentPortal.n === currentPath.n))
+            ) {
+              currentPortal.d.push(pathNum);
+              currentPath.q.push(portalNum);
             }
           }
         }
