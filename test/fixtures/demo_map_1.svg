@@ -122,28 +122,28 @@
 	</a>
 </g>
 <g id="Portals">
-	<circle id="Elev.1.floor2" cx="297" cy="237" r="2"/>
-	<circle id="Stair.1.floor2" cx="297" cy="273" r="2"/>
+	<circle id="Elev.1.floor2" cx="297" cy="237" r="2" data-accessible-route="true"/>
+	<circle id="Stair.1.floor2" cx="297" cy="273" r="2" data-accessible-route="false"/>
 </g>
 <g id="Points">
-	<circle id="lobby" cx="297" cy="408" r="2"/>
-	<circle id="R121_1_" cx="117" cy="156" r="2"/>
-	<circle id="R122_1_" cx="207" cy="120" r="2"/>
-	<circle id="R123_4_" cx="270" cy="120" r="2"/>
-	<circle id="R123_3_" cx="270" cy="174" r="2"/>
-	<circle id="R123_2_" cx="333" cy="120" r="2"/>
-	<circle id="R123_1_" cx="333" cy="174" r="2"/>
-	<circle id="R104_1_" cx="243" cy="327" r="2"/>
-	<circle id="R103_1_" cx="243" cy="255" r="2"/>
-	<circle id="R112_1_" cx="360" cy="273" r="2"/>
-	<circle id="R111_1_" cx="360" cy="345" r="2"/>
-	<circle id="R102_1_" cx="117" cy="273" r="2"/>
-	<circle id="R101_1_" cx="117" cy="345" r="2"/>
-	<circle id="R113_1_" cx="486" cy="255" r="2"/>
-	<circle id="R114_1_" cx="486" cy="327" r="2"/>
-	<circle id="R125_1_" cx="486" cy="138" r="2"/>
-	<circle id="R124_1_" cx="378" cy="120" r="2"/>
-	<circle id="lcd.1" cx="297" cy="354" r="2"/>
+	<circle data-destination="" id="lobby" cx="297" cy="408" r="2"/>
+	<circle data-destination="" id="R121_1_" cx="117" cy="156" r="2"/>
+	<circle data-destination="" id="R122_1_" cx="207" cy="120" r="2"/>
+	<circle data-destination="" id="R123_4_" cx="270" cy="120" r="2"/>
+	<circle data-destination="" id="R123_3_" cx="270" cy="174" r="2"/>
+	<circle data-destination="" id="R123_2_" cx="333" cy="120" r="2"/>
+	<circle data-destination="" id="R123_1_" cx="333" cy="174" r="2"/>
+	<circle data-destination="" id="R104_1_" cx="243" cy="327" r="2"/>
+	<circle data-destination="" id="R103_1_" cx="243" cy="255" r="2"/>
+	<circle data-destination="" id="R112_1_" cx="360" cy="273" r="2"/>
+	<circle data-destination="" id="R111_1_" cx="360" cy="345" r="2"/>
+	<circle data-destination="" id="R102_1_" cx="117" cy="273" r="2"/>
+	<circle data-destination="" id="R101_1_" cx="117" cy="345" r="2"/>
+	<circle data-destination="" id="R113_1_" cx="486" cy="255" r="2"/>
+	<circle data-destination="" id="R114_1_" cx="486" cy="327" r="2"/>
+	<circle data-destination="" id="R125_1_" cx="486" cy="138" r="2"/>
+	<circle data-destination="" id="R124_1_" cx="378" cy="120" r="2"/>
+	<circle data-destination="" id="lcd.1" cx="297" cy="354" r="2"/>
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="273" x2="315" y2="273"/>

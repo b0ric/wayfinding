@@ -367,9 +367,9 @@
         dataStore.p[mapNum].push(path);
       });
 
-      // Points
+      // Destinations
       // roomId or POI_Id
-      $('#Points circle', el).each(function () { // index, line
+      $('#Points circle[data-destination]', el).each(function () { // index, line
         cx = $(this).attr('cx');
         cy = $(this).attr('cy');
         pointId = $(this).attr('id');
@@ -398,7 +398,7 @@
         portal.id = portalId;
         portal.type = portalId.split('.')[0];
         portal.floor = map.id;
-
+        portal.ar = $(this).data('accessible-route');
         portal.mate = portalId.split('.').slice(0, 2).join('.') + '.' + map.id;
 
         portal.mapNum = mapNum;
@@ -450,7 +450,7 @@
               innerSegment.matched = true;
 
               portal.t = outerSegment.type;
-              portal.a = (portal.t === 'Elev' || portal.t === 'Door') ? true : false; // consider changing to != Stair
+              portal.a = outerSegment.ar;
 
               // portal.idA = outerSegment.id;
               portal.f = outerSegment.floor;

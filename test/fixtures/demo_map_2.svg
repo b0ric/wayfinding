@@ -52,12 +52,12 @@
 	</a>
 </g>
 <g id="Portals">
-	<circle id="Elev.1.floor1" cx="297" cy="237" r="2"/>
-	<circle id="Stair.1.floor1" cx="288" cy="273" r="2"/>
+	<circle id="Elev.1.floor1" cx="297" cy="237" r="2" data-accessible-route="true"/>
+	<circle id="Stair.1.floor1" cx="288" cy="273" r="2" data-accessible-route="false"/>
 </g>
 <g id="Points">
-	<circle id="R201_1_" cx="297" cy="408" r="2"/>
-	<circle id="R202_1_" cx="504" cy="111" r="2"/>
+	<circle data-destination="" id="R201_1_" cx="297" cy="408" r="2"/>
+	<circle data-destination="" id="R202_1_" cx="504" cy="111" r="2"/>
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>
