@@ -337,10 +337,8 @@
     function buildDataStore(mapNum, map, el) {
       var path,
         pointId,
-        x1,
-        y1,
-        x2,
-        y2,
+        cx,
+        cy,
         matches,
         portal,
         portalId;
@@ -371,16 +369,15 @@
 
       // Points
       // roomId or POI_Id
-
       $('#Points circle', el).each(function () { // index, line
-        x1 = $(this).attr('cx');
-        y1 = $(this).attr('cy');
+        cx = $(this).attr('cx');
+        cy = $(this).attr('cy');
         pointId = $(this).attr('id');
 
         $.each(dataStore.p[mapNum], function (index, segment) {
-          if (map.id === segment.floor && ((segment.x === x1 && segment.y === y1))) {
+          if (map.id === segment.floor && ((segment.x === cx && segment.y === cy))) {
             segment.d.push(pointId);
-          } else if (map.id === segment.floor && ((segment.m === x1 && segment.n === y1))) {
+          } else if (map.id === segment.floor && ((segment.m === cx && segment.n === cy))) {
             segment.e.push(pointId);
           }
         });
@@ -389,7 +386,7 @@
 
       //Portal Segments -- string theory says unmatched portal segment useless -- no wormhole
 
-      $('#Portals line', el).each(function () { // index, line
+      $('#Portals circle', el).each(function () { // index, line
         portal = {};
 
         portalId = $(this).attr('id');
@@ -408,26 +405,19 @@
 
         portal.matched = false;
 
-        x1 = $(this).attr('x1');
-        y1 = $(this).attr('y1');
-        x2 = $(this).attr('x2');
-        y2 = $(this).attr('y2');
-
+        cx = $(this).attr('cx');
+        cy = $(this).attr('cy');
         matches = $.grep(dataStore.p[mapNum], function (n) { // , i
-          return ((x1 === n.x && y1 === n.y) || (x1 === n.m && y1 === n.n));
+          return ((cx === n.x && cy === n.y) || (cx === n.m && cy === n.n));
         });
 
         if (matches.length !== 0) {
-          portal.x = x1;
-          portal.y = y1;
-        } else {
-          portal.x = x2;
-          portal.y = y2;
+          portal.x = cx;
+          portal.y = cy;
         }
 
         //portal needs length -- long stairs versus elevator
-        portal.l = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-
+        portal.l = Math.sqrt(Math.pow(cx, 2) + Math.pow(cy, 2));
         portalSegments.push(portal);
       });
     } // function buildDataStore
@@ -447,9 +437,7 @@
         pathNum;
 
       for (segmentOuterNum = 0; segmentOuterNum < portalSegments.length; segmentOuterNum++) {
-
         outerSegment = portalSegments[segmentOuterNum];
-
         if (outerSegment.matched === false) {
 
           for (segmentInnerNum = segmentOuterNum; segmentInnerNum < portalSegments.length; segmentInnerNum++) {
@@ -484,7 +472,6 @@
               portal.p = -1;
 
               dataStore.q.push(portal);
-
             }
           }
         }

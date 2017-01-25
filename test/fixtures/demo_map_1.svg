@@ -122,8 +122,8 @@
 	</a>
 </g>
 <g id="Portals">
-	<line id="Elev.1.floor2" fill="none" stroke="#FF00FF" x1="297" y1="237" x2="315" y2="255"/>
-	<line id="Stair.1.floor2" fill="none" stroke="#FF00FF" x1="297" y1="273" x2="288" y2="273"/>
+	<circle id="Elev.1.floor2" cx="297" cy="237" r="2"/>
+	<circle id="Stair.1.floor2" cx="297" cy="273" r="2"/>
 </g>
 <g id="Points">
 	<circle id="lobby" cx="297" cy="408" r="2"/>
