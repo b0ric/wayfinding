@@ -360,6 +360,7 @@
         path.n = $(this).attr('y2');
         path.e = [];
         path.l = Math.sqrt(Math.pow(path.x - path.m, 2) + Math.pow(path.y - path.n, 2));
+        path.ar = $(this).data('accessible-route');
 
         path.c = []; //other paths
         path.q = []; // connected portals
@@ -570,7 +571,8 @@
       // for each connection
       $.each(dataStore.p[segmentFloor][segment].c, function (i, tryPath) {
         // check and see if the current path is a shorter path to the new path
-        if (length + dataStore.p[segmentFloor][tryPath].l < dataStore.p[segmentFloor][tryPath].r) {
+        if (length + dataStore.p[segmentFloor][tryPath].l < dataStore.p[segmentFloor][tryPath].r && (options.accessibleRoute === false ||
+          (options.accessibleRoute === true && dataStore.p[segmentFloor][tryPath].ar === true))) {
           dataStore.p[segmentFloor][tryPath].r = length + dataStore.p[segmentFloor][tryPath].l;
           dataStore.p[segmentFloor][tryPath].p = segment;
           dataStore.p[segmentFloor][tryPath].o = segmentType;

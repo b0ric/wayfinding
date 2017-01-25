@@ -146,69 +146,69 @@
 	<circle data-destination="" id="lcd.1" cx="297" cy="354" r="2"/>
 </g>
 <g id="Paths">
-	<line fill="none" stroke="#00FFFF" x1="297" y1="273" x2="315" y2="273"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="264" x2="342" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="336" x2="261" y2="264"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="264" x2="243" y2="255"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="381" x2="261" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="336" x2="99" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="381" x2="261" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="381" x2="261" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="354" x2="297" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="333" y1="174" x2="333" y2="120"/>
-	<line fill="none" stroke="#00FFFF" x1="333" y1="120" x2="342" y2="102"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="336" x2="243" y2="327"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="336" x2="360" y2="345"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="264" x2="360" y2="273"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="192" x2="261" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="192" x2="270" y2="174"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="192" x2="333" y2="174"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="237" x2="297" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="219" x2="261" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="219" x2="261" y2="264"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="219" x2="342" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="219" x2="342" y2="264"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="336" x2="315" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="336" x2="315" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="315" y1="273" x2="315" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="192" x2="261" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="192" x2="342" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="264" x2="99" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="336" x2="117" y2="345"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="264" x2="117" y2="273"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="147" x2="99" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="147" x2="117" y2="156"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="192" x2="261" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="264" x2="99" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="219" x2="261" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="192" x2="99" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="102" x2="261" y2="102"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="102" x2="270" y2="120"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="102" x2="216" y2="102"/>
-	<line fill="none" stroke="#00FFFF" x1="216" y1="102" x2="207" y2="120"/>
-	<line fill="none" stroke="#00FFFF" x1="216" y1="102" x2="99" y2="102"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="102" x2="99" y2="147"/>
-	<line fill="none" stroke="#00FFFF" x1="261" y1="192" x2="99" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="99" y1="219" x2="261" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="102" x2="387" y2="102"/>
-	<line fill="none" stroke="#00FFFF" x1="387" y1="102" x2="378" y2="120"/>
-	<line fill="none" stroke="#00FFFF" x1="387" y1="102" x2="504" y2="102"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="102" x2="504" y2="147"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="147" x2="486" y2="138"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="147" x2="504" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="192" x2="342" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="219" x2="504" y2="219"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="219" x2="504" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="219" x2="342" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="219" x2="504" y2="192"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="219" x2="504" y2="264"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="264" x2="486" y2="255"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="264" x2="504" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="336" x2="486" y2="327"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="336" x2="504" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="504" y1="381" x2="342" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="381" x2="342" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="381" x2="297" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="273" x2="315" y2="273"/>
+	<line data-accessible-route="false" fill="none" stroke="#FF0000" x1="342" y1="264" x2="342" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="336" x2="261" y2="264"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="264" x2="243" y2="255"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="381" x2="261" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="336" x2="99" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="381" x2="261" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="381" x2="261" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="354" x2="297" y2="381"/>
+	<line data-accessible-route="false" fill="none" stroke="#FF0000" x1="333" y1="174" x2="333" y2="120"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="333" y1="120" x2="342" y2="102"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="336" x2="243" y2="327"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="336" x2="360" y2="345"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="264" x2="360" y2="273"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="192" x2="261" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="192" x2="270" y2="174"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="192" x2="333" y2="174"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="237" x2="297" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="219" x2="261" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="219" x2="261" y2="264"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="219" x2="342" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="219" x2="342" y2="264"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="336" x2="315" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="336" x2="315" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="315" y1="273" x2="315" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="192" x2="261" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="192" x2="342" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="264" x2="99" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="336" x2="117" y2="345"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="264" x2="117" y2="273"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="147" x2="99" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="147" x2="117" y2="156"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="192" x2="261" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="264" x2="99" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="219" x2="261" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="192" x2="99" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="102" x2="261" y2="102"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="102" x2="270" y2="120"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="102" x2="216" y2="102"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="216" y1="102" x2="207" y2="120"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="216" y1="102" x2="99" y2="102"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="102" x2="99" y2="147"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="261" y1="192" x2="99" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="99" y1="219" x2="261" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="102" x2="387" y2="102"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="387" y1="102" x2="378" y2="120"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="387" y1="102" x2="504" y2="102"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="102" x2="504" y2="147"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="147" x2="486" y2="138"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="147" x2="504" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="192" x2="342" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="219" x2="504" y2="219"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="219" x2="504" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="219" x2="342" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="219" x2="504" y2="192"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="219" x2="504" y2="264"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="264" x2="486" y2="255"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="264" x2="504" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="336" x2="486" y2="327"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="336" x2="504" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="504" y1="381" x2="342" y2="381"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="381" x2="342" y2="336"/>
+	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="342" y1="381" x2="297" y2="381"/>
 </g>
 </svg>
