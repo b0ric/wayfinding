@@ -13,72 +13,60 @@
 			<div id="myMaps">
 			</div>
 			<div id="controls">
-				<label>Show</label>
-				<button id="floor1">1st Floor</button>
-				<button id="floor2">2nd Floor</button>
-				<button id="floor3">3rd Floor</button>
-				<label for="beginSelect">Begin Route at</label>
-				<select id="beginSelect">
-					<option value="lcd.1">Reception</option>
-					<option value="lobby">Lobby</option>
-					<option value="R123">Conf Room</option>
-				</select>
-				<label for="endSelect">Show Route to</label>
-				<select id="endSelect">
-					<option></option>
-					<option disabled="true">West 1st</option>
-					<option value="R101">101</option>
-					<option value="R102">102</option>
-					<option value="R103">103</option>
-					<option value="R104">104</option>
-					<option disabled="true">East 1st</option>
-					<option value="R111">111</option>
-					<option value="R112">112</option>
-					<option value="R113">113</option>
-					<option value="R114">114</option>
-					<option disabled="true">North 1st</option>
-					<option value="R121">121</option>
-					<option value="R122">122</option>
-					<option value="R123">123</option>
-					<option value="R124">124</option>
-					<option value="R125">125</option>
-					<option disabled="true">2nd</option>
-					<option value="R201">201</option>
-					<option value="R202">202</option>
-					<option disabled="true">3rd</option>
-					<option value="R301">301</option>
-					<option value="R302">302</option>
-				</select>
-				<label for="accessible">Accessible</label>
-				<input id="accessible" type="checkbox" name="accessible" value="Accessible" />
-				<button id="change-floor" style="display: none;">Next floor</button>
+                <div class="control-block">
+                    <label>Show</label>
+                    <button id="floor1" class="floor-buttons">1st Floor</button>
+                    <button id="floor2" class="floor-buttons">2nd Floor</button>
+                    <button id="floor3" class="floor-buttons">3rd Floor</button>
+                </div>
+                <div class="control-block">
+                    <label for="beginSelect">Begin route at</label>
+                    <select id="beginSelect">
+                        <option value="lcd.1">Reception</option>
+                        <option value="lobby">Lobby</option>
+                        <option value="R123">Conf Room</option>
+                    </select>
+                    <label for="endSelect">Show route to</label>
+                    <select id="endSelect">
+                        <option></option>
+                        <option disabled="true">West 1st</option>
+                        <option value="R101">101</option>
+                        <option value="R102">102</option>
+                        <option value="R103">103</option>
+                        <option value="R104">104</option>
+                        <option disabled="true">East 1st</option>
+                        <option value="R111">111</option>
+                        <option value="R112">112</option>
+                        <option value="R113">113</option>
+                        <option value="R114">114</option>
+                        <option disabled="true">North 1st</option>
+                        <option value="R121">121</option>
+                        <option value="R122">122</option>
+                        <option value="R123">123</option>
+                        <option value="R124">124</option>
+                        <option value="R125">125</option>
+                        <option disabled="true">2nd</option>
+                        <option value="R201">201</option>
+                        <option value="R202">202</option>
+                        <option disabled="true">3rd</option>
+                        <option value="R301">301</option>
+                        <option value="R302">302</option>
+                    </select>
+                    <label for="accessible">Accessible</label>
+                    <input id="accessible" type="checkbox" name="accessible" value="Accessible" />
+                </div>
+                <div class="control-block">
+				    <button id="change-floor" style="display: none;">Next floor</button>
+                    <button id="toggle-paths">Show/hide paths</button>
+                    <button id="toggle-portals">Show/hide portals</button>
+                    <button id="toggle-points">Show/hide doors</button>
+                </div>
 			</div>
 		</div>
 		<div>
 			<h1>Wayfinding Demo</h1>
-			<p>For more information see <a href="https://github.com/ucdavis/wayfinding">https://github.com/ucdavis/wayfinding</a></p>
-			<h2>Things to try</h2>
-			<ul>
-				<li>Click any room and it will trigger the routing. We will be using this with a touch screen lcd at key points in our building.</li>
-				<li>In addition to clicking on a room it is possible to trigger routing using the "Show Route to" dropdown or through JavaScript.</li>
-				<li>Route to room 201 and try it with the Accessible option on and off an you will see that the accessible route takes the elevator rather than the stairs even though the path is longer. Accessible routing will be extended to allow certain path segments to be considered accessible or not.</li>
-				<li>Change the "Begin Route at" selection and it will remember the last destination and reroute.</li>
-				<li>Click the <a href="#" onClick="javascript:$('#myMaps').wayfinding('routeTo', 'R122');">second room from the left</a> on the top row on the first floor and note that it routes through the right hand side of the room next to it. The left hand side is set not to pass traffic. You can choose which routes to enable.</li>
-				<li>
-					<a href="#" onClick="javascript:$('#Paths line').attr('stroke-opacity', 1);">Show paths</a>.
-					<a href="#" onClick="javascript:$('#Paths line').attr('stroke-opacity', 0);">Hide paths</a>.
-					<a href="#" onClick="javascript:$('#Portals line').attr('stroke-opacity', 1);">Show portals</a>.
-					<a href="#" onClick="javascript:$('#Portals line').attr('stroke-opacity', 0);">Hide portals</a>.
-					<a href="#" onClick="javascript:$('#Points circle').attr('fill-opacity', 1);">Show doors</a>.
-					<a href="#" onClick="javascript:$('#Points circle').attr('fill-opacity', 0);">Hide doors</a>.
-				</li>
-				<li>one way paths - work in progress</li>
-				<li>portal lengths as route consideration - work in progress</li>
-				<li>$('#myMaps').wayfinding('checkMap') make into clickable report into report div</li>
-				<li>in addition to checkMap, add a dump parse, consider a load parse from JSON</li>
-			</ul>
+			<p>For more information see <a href="https://github.com/o2web/wayfinding">https://github.com/o2web/wayfinding</a> or <a href="https://github.com/ucdavis/wayfinding">https://github.com/ucdavis/wayfinding</a></p>
 		</div>
-
 
 		<script src="bower_components/jquery/dist/jquery.js"></script>
 		<script src="src/jquery.wayfinding.js"></script>
@@ -86,6 +74,10 @@
 		<script>
 			$(document).ready(function () {
 				'use strict';
+                var pathsOpacity = 0,
+                    portalsOpacity = 0,
+                    pointsOpacity = 0;
+
 				$('#myMaps').wayfinding({
 					'maps': [
 						{'path': 'test/fixtures/demo_map_1.svg', 'id': 'floor1'},
@@ -108,7 +100,7 @@
 				});
 
 				//make the floor buttons clickable
-				$('#controls button').click(function () {
+				$('#controls .floor-buttons').click(function () {
 					$('#myMaps').wayfinding('currentMap', $(this).prop('id'));
 				});
 
@@ -137,6 +129,23 @@
 				$('#myMaps').on('wayfinding:roomClicked', function(e, r) {
 					$('#endSelect option[value="' + r.roomId + '"]').attr('selected', true);
 				});
+
+                $("#toggle-paths").on('click', function() {
+                    var op = (pathsOpacity === 1) ? 0 : 1;
+                    $('#Paths line').attr('stroke-opacity', op);
+                    return false;
+                });
+
+                $("#toggle-portals").on('click', function() {
+                    var op = (portalsOpacity === 1) ? 0 : 1;
+                    $('#Portals circle').attr('fill-opacity', op);
+                    return false;
+                });
+                $("#toggle-points").on('click', function() {
+                    var op = (pointsOpacity === 1) ? 0 : 1;
+                    $('#Points circle').attr('fill-opacity', op);
+                    return false;
+                });
 
 			});
 		</script>
