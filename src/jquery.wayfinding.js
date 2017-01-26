@@ -372,28 +372,28 @@
     function buildDataStore(mapNum, map, el)
     {
       var path, pointId, cx, cy,
-        matches, portal, portalId;
+        matches, portal, portalId, ar;
 
       dataStore.p[mapNum] = [];
 
       //Paths
       $('#Paths line', el).each(function () {
-        path = {};
-        path.floor = map.id; // floor_1
-        path.r = Infinity; //Distance
-        path.p = -1; //Prior node in path that yielded route distance
-
-        path.x = $(this).attr('x1');
-        path.y = $(this).attr('y1');
-        path.d = [];
-        path.m = $(this).attr('x2');
-        path.n = $(this).attr('y2');
-        path.e = [];
+        ar = ($(this).data('accessible-route') !== false) ? true : false;
+        path = {
+          floor: map.id, // floor_1
+          r: Infinity, // Distance
+          p: -1, // Prior node in path that yielded route distance
+          x: $(this).attr('x1'),
+          y: $(this).attr('y1'),
+          d: [],
+          m: $(this).attr('x2'),
+          n: $(this).attr('y2'),
+          e: [],
+          ar: ar,
+          c: [], //other paths
+          q: [] // connected portals
+        };
         path.l = Math.sqrt(Math.pow(path.x - path.m, 2) + Math.pow(path.y - path.n, 2));
-        path.ar = $(this).data('accessible-route');
-
-        path.c = []; //other paths
-        path.q = []; // connected portals
 
         dataStore.p[mapNum].push(path);
       });
@@ -420,12 +420,12 @@
         if (portalId && portalId.indexOf('_') > -1) {
           portalId = portalId.slice(0, portalId.indexOf('_'));
         }
-
+        ar = ($(this).data('accessible-route') !== false) ? true : false;
         portal = {
           id: portalId,
           type: portalId.split('.')[0],
           floor: map.id,
-          ar: $(this).data('accessible-route'),
+          ar: ar,
           mate: portalId.split('.').slice(0, 2).join('.') + '.' + map.id,
           mapNum: mapNum,
           matched: false
