@@ -37,15 +37,15 @@
 	</g>
 </g>
 <g id="Rooms">
-	<a id="R201" xlink:href="#" >
+	<a id="R301" xlink:href="#" >
 		<g>
-			<rect x="279.5" y="399.5" fill="#E6E6E6" width="44" height="26"/>
+			<rect x="279.5" y="399.5" fill="#E6ADD8" width="44" height="26"/>
 			<path d="M323,400v25h-43v-25H323 M324,399h-45v27h45V399L324,399z"/>
 		</g>
 	</a>
-	<a id="R202" xlink:href="#" >
+	<a id="R302" xlink:href="#" >
 		<g>
-			<path fill="#E6E6E6" d="M504.472,119.5c-0.17-1.959-1.346-9-9.472-9h-0.5v9h-8v-35h35v35H504.472z"/>
+			<path fill="#E6ADD8" d="M504.472,119.5c-0.17-1.959-1.346-9-9.472-9h-0.5v9h-8v-35h35v35H504.472z"/>
 			<path d="M521,85v34h-16.081c-0.322-2.533-1.929-9-9.919-9h-1v1v7.875V119h-7V85H521 M522,84h-36v36h9c0,0,0,0,0-9c9,0,9,9,9,9h18
 				V84L522,84z"/>
 		</g>
@@ -53,13 +53,13 @@
 </g>
 <g id="Portals">
 	<circle id="Elev.1.floor1" cx="297" cy="237" r="2" data-accessible-route="true"/>
-	<circle id="Stair.1.floor1" cx="288" cy="273" r="2" data-accessible-route="false"/>
-	<circle id="Elev.1.floor3" cx="297" cy="237" r="2" data-accessible-route="true"/>
-	<circle id="Stair.1.floor3" cx="288" cy="273" r="2" data-accessible-route="false"/>
+	<circle id="Elev.1.floor1" cx="297" cy="237" r="2" data-accessible-route="true"/>
+	<circle id="Stair.1.floor2" cx="288" cy="273" r="2" data-accessible-route="false"/>
+	<circle id="Stair.1.floor2" cx="288" cy="273" r="2" data-accessible-route="false"/>
 </g>
 <g id="Points">
-	<circle data-destination="" id="R201_1_" cx="297" cy="408" r="2"/>
-	<circle data-destination="" id="R202_1_" cx="504" cy="111" r="2"/>
+	<circle data-destination="" id="R301_1_" cx="297" cy="408" r="2"/>
+	<circle data-destination="" id="R302_1_" cx="504" cy="111" r="2"/>
 </g>
 <g id="Paths">
 	<line data-accessible-route="true" fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>

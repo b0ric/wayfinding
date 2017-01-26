@@ -16,6 +16,7 @@
 				<label>Show</label>
 				<button id="floor1">1st Floor</button>
 				<button id="floor2">2nd Floor</button>
+				<button id="floor3">3rd Floor</button>
 				<label for="beginSelect">Begin Route at</label>
 				<select id="beginSelect">
 					<option value="lcd.1">Reception</option>
@@ -44,6 +45,9 @@
 					<option disabled="true">2nd</option>
 					<option value="R201">201</option>
 					<option value="R202">202</option>
+					<option disabled="true">3rd</option>
+					<option value="R301">301</option>
+					<option value="R302">302</option>
 				</select>
 				<label for="accessible">Accessible</label>
 				<input id="accessible" type="checkbox" name="accessible" value="Accessible" />
@@ -85,7 +89,8 @@
 				$('#myMaps').wayfinding({
 					'maps': [
 						{'path': 'test/fixtures/demo_map_1.svg', 'id': 'floor1'},
-						{'path': 'test/fixtures/demo_map_2.svg', 'id': 'floor2'}
+						{'path': 'test/fixtures/demo_map_2.svg', 'id': 'floor2'},
+						{'path': 'test/fixtures/demo_map_3.svg', 'id': 'floor3'}
 					],
 					'path': {
 						width: 3,
