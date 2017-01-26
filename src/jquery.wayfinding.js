@@ -48,11 +48,6 @@
    * @property {integer} floorChangeAnimationDelay [description]
    */
 
-  /**
-   * @todo verify that endpoint can take both string and function, there is
-   * some code in place for this
-   */
-
   var defaults = {
     /**
      * @typedef map
@@ -734,7 +729,6 @@
       reversePathStart = -1;
 
       for (i = 0; i < destInfo.paths.length; i++) {
-
         if (dataStore.p[destinationmapNum][destInfo.paths[i]].r < minPath) {
           minPath = dataStore.p[destinationmapNum][destInfo.paths[i]].r;
           reversePathStart = destInfo.paths[i];
@@ -1321,14 +1315,14 @@
           floorChange();
         }, animationDuration + options.floorChangeAnimationDelay);
       } else {
-        console.log(solution);
-        var $trigger = $(options.changeFloorTrigger);
-        // TODO: remove disabled only when first animation is complete
-        $trigger.show();
-        $trigger.on('click', function() {
-          floorChange();
-          $(this).hide();
-        });
+        if(solution[0].floor !== solution[solution.length -1].floor) {
+          var $trigger = $(options.changeFloorTrigger);
+          $trigger.show();
+          $trigger.on('click', function() {
+            floorChange();
+            $(this).hide();
+          });
+        }
       }
     } // end function animatePath
 
@@ -1375,7 +1369,6 @@
         solution = getShortestRoute();
 
         if (reversePathStart !== -1) {
-
           portalsEntered = 0;
           // Count number of portal trips
           for (i = 0; i < solution.length; i++) {
@@ -1386,11 +1379,7 @@
 
           //break this into a new function?
           drawing = new Array(portalsEntered); // Problem at line 707 character 40: Use the array literal notation [].
-
           drawing[0] = [];
-
-          //build drawing and modify solution for text generation by adding .direction to solution segments?
-
           draw = {};
 
           if (solution.length === 0) {
@@ -1458,6 +1447,7 @@
                 drawing[i].push(draw);
                 drawing[i].routeLength += draw.length;
               }
+
               if (solution[stepNum].type === 'po') {
                 drawing[i + 1] = [];
                 drawing[i + 1].routeLength = 0;
