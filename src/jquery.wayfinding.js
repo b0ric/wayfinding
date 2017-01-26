@@ -85,10 +85,7 @@
     // route to this point as soon as the maps load. Can be initialized
     // as a function or a string (for consistency with startpoint)
     'endpoint': false,
-    // Controls routing through stairs
-    // if true return an accessible route
-    // if false return the shortest route possible
-    'accessibleRoute': false,
+    'accessibleRoute': false, // Controls routing through paths/portals with data-accessible-route attribute
     // Provides the identifier for the map that should be show at startup,
     // if not given will default to showing first map in the array
     'defaultMap': function () {
@@ -101,18 +98,18 @@
     // string representing url if it should be used
     // string is URL path where filename to load will be in the form startpoint + '.json' or startpoint + '.acc.json'
     'dataStoreCache': null,
-    // place marker for "you are here"
-    'showLocation': false,
+    'showLocation': false, // place marker for "you are here"
     //styling for the "you are here pin"
     'locationIndicator': {
       fill: 'red',
       height: 40
     },
     'pinchToZoom': false, // requires jquery.panzoom
-    'zoomToRoute': true,
+    'zoomToRoute': false,
     'zoomPadding': 25,
-    // milliseconds to wait during animation when a floor change occurs
-    'floorChangeAnimationDelay': 1250
+    'autoChangeFloor': false, // change floor automatically or require a user's action
+    'changeFloorTrigger': '#change-floor',
+    'floorChangeAnimationDelay': 1250 // milliseconds to wait during animation when a floor change occurs
   },
   dataStore;
 
@@ -155,10 +152,6 @@
    */
 
   /**
-   * @todo change floor to f in floors
-   */
-
-  /**
    * @typedef portals
    * @memberOf plugin
    * @type {object}
@@ -193,7 +186,8 @@
    * @namespace plugin
    */
 
-  $.fn.wayfinding = function (action, options, callback) {
+  $.fn.wayfinding = function (action, options, callback)
+  {
     var passed = options,
       obj, // the jQuery object being worked with;
       maps, // the array of maps populated from options each time
@@ -213,18 +207,34 @@
      * @param {string} sel the jQuery selector to escape
      * @description to handle jQuery selecting ids with periods and other special characters
      */
-    function escapeSelector(sel) {
+    function escapeSelector(sel)
+    {
       return sel.replace(/(:|\.|\[|\])/g, '\\$1');
     }
 
-    // Applies linear interpolation to find the correct value
-    // for traveling from value oldValue to newValue taking into account
-    // that you are (i / steps) of the way through the process
-    function interpolateValue(oldValue, newValue, i, steps) {
+    /**
+     * Applies linear interpolation to find the correct value
+     * for traveling from value oldValue to newValue taking into account
+     * that you are (i / steps) of the way through the process
+     *
+     * @param oldValue
+     * @param newValue
+     * @param i
+     * @param steps
+     * @returns {number}
+     */
+    function interpolateValue(oldValue, newValue, i, steps)
+    {
       return (((steps - i) / steps) * oldValue) + ((i / steps) * newValue);
     }
 
-    function CheckMapEmpty(value) {
+    /**
+     *
+     * @param value
+     * @constructor
+     */
+    function CheckMapEmpty(value)
+    {
       this.value = value;
       this.message = ' no maps identified in collection to load';
       this.toString = function () {
@@ -232,7 +242,13 @@
       };
     }
 
-    function CheckMapDuplicates(value) {
+    /**
+     *
+     * @param value
+     * @constructor
+     */
+    function CheckMapDuplicates(value)
+    {
       this.value = value;
       this.message = ' has duplicate map ids';
       this.toString = function () {
@@ -240,7 +256,13 @@
       };
     }
 
-    function CheckMapBadDefault(value) {
+    /**
+     *
+     * @param value
+     * @constructor
+     */
+    function CheckMapBadDefault(value)
+    {
       this.value = value;
       this.message = ' wasn\'t in the list of maps';
       this.toString = function () {
@@ -248,8 +270,13 @@
       };
     }
 
-    // Ensure floor ids are unique.
-    function checkIds(el) {
+    /**
+     * Ensure floor ids are unique.
+     *
+     * @param el
+     */
+    function checkIds(el)
+    {
       var mapNum,
         checkNum,
         reassign = false,
@@ -289,11 +316,19 @@
         $(status).text(options.errorMessage);
         throw new CheckMapEmpty(JSON.stringify(maps));
       }
-    } //function checkIds
+    } // end function checkIds
 
-    // Takes x and y coordinates and makes a location indicating pin for those
-    // coordinates. Returns the pin element, not yet attached to the DOM.
-    function makePin(x, y, type) {
+    /**
+     * Takes x and y coordinates and makes a location indicating pin for those
+     * coordinates. Returns the pin element, not yet attached to the DOM.
+     *
+     * @param x
+     * @param y
+     * @param type
+     * @returns {Element|*}
+     */
+    function makePin(x, y, type)
+    {
       var indicator,
         pin,
         circle,
@@ -330,26 +365,26 @@
       indicator.setAttribute('transform', 'translate(' + x + ' ' + (y - 10 * (height / 125)) + ') scale(' + height / 125 + ')');
 
       return indicator;
+    } // end function makePin
 
-    } //function makePin
+    /**
+     * Extract data from the svg maps
+     *
+     * @param mapNum
+     * @param map
+     * @param el
+     */
+    function buildDataStore(mapNum, map, el)
+    {
+      var path, pointId, cx, cy,
+        matches, portal, portalId;
 
-    // Extract data from the svg maps
-    function buildDataStore(mapNum, map, el) {
-      var path,
-        pointId,
-        cx,
-        cy,
-        matches,
-        portal,
-        portalId;
-
-      //Paths
       dataStore.p[mapNum] = [];
 
+      //Paths
       $('#Paths line', el).each(function () {
         path = {};
         path.floor = map.id; // floor_1
-        // path.mapNum = mapNum; // index of floor in array 1
         path.r = Infinity; //Distance
         path.p = -1; //Prior node in path that yielded route distance
 
@@ -368,8 +403,7 @@
         dataStore.p[mapNum].push(path);
       });
 
-      // Destinations
-      // roomId or POI_Id
+      // Destinations: roomId or POI_Id
       $('#Points circle[data-destination]', el).each(function () { // index, line
         cx = $(this).attr('cx');
         cy = $(this).attr('cy');
@@ -386,28 +420,25 @@
       });
 
       //Portal Segments -- string theory says unmatched portal segment useless -- no wormhole
-
       $('#Portals circle', el).each(function () { // index, line
-        portal = {};
-
         portalId = $(this).attr('id');
-
         if (portalId && portalId.indexOf('_') > -1) {
           portalId = portalId.slice(0, portalId.indexOf('_'));
         }
 
-        portal.id = portalId;
-        portal.type = portalId.split('.')[0];
-        portal.floor = map.id;
-        portal.ar = $(this).data('accessible-route');
-        portal.mate = portalId.split('.').slice(0, 2).join('.') + '.' + map.id;
-
-        portal.mapNum = mapNum;
-
-        portal.matched = false;
+        portal = {
+          id: portalId,
+          type: portalId.split('.')[0],
+          floor: map.id,
+          ar: $(this).data('accessible-route'),
+          mate: portalId.split('.').slice(0, 2).join('.') + '.' + map.id,
+          mapNum: mapNum,
+          matched: false
+        };
 
         cx = $(this).attr('cx');
         cy = $(this).attr('cy');
+
         matches = $.grep(dataStore.p[mapNum], function (n) { // , i
           return ((cx === n.x && cy === n.y) || (cx === n.m && cy === n.n));
         });
@@ -423,23 +454,20 @@
       });
     } // function buildDataStore
 
-    // after data extracted from all svg maps then build portals between them
-    function buildPortals() {
+    /**
+     * After data extracted from all svg maps then build portals between them
+     *
+     */
+    function buildPortals()
+    {
 
-      var segmentOuterNum,
-        segmentInnerNum,
-        outerSegment,
-        innerSegment,
-        portal,
-        mapNum,
-        pathOuterNum,
-        pathInnerNum,
-        currentInnerPath,
-        currentOuterPath,
-        portalNum,
-        pathNum,
-        currentPortal,
-        currentPath;
+      var segmentOuterNum, segmentInnerNum,
+        outerSegment, innerSegment,
+        portal, mapNum,
+        pathOuterNum, pathInnerNum,
+        currentInnerPath, currentOuterPath,
+        portalNum, pathNum,
+        currentPortal, currentPath;
 
       for (segmentOuterNum = 0; segmentOuterNum < portalSegments.length; segmentOuterNum++) {
         outerSegment = portalSegments[segmentOuterNum];
@@ -454,27 +482,25 @@
               outerSegment.matched = true;
               innerSegment.matched = true;
 
-              portal.t = outerSegment.type;
-              portal.a = outerSegment.ar;
-
-              // portal.idA = outerSegment.id;
-              portal.f = outerSegment.floor;
-              portal.g = outerSegment.mapNum;
-              portal.x = outerSegment.x;
-              portal.y = outerSegment.y;
-              portal.c = []; //only paths
-
-              // portal.idB = innerSegment.id;
-              portal.j = innerSegment.floor;
-              portal.k = innerSegment.mapNum;
-              portal.m = innerSegment.x;
-              portal.n = innerSegment.y;
-              portal.d = []; // only paths
-
-              portal.l = outerSegment.l + innerSegment.l; // length is combined lengths
-
-              portal.r = Infinity;
-              portal.p = -1;
+              portal = {
+                t: outerSegment.type,
+                a: outerSegment.ar,
+                // idA: outerSegment.id,
+                f: outerSegment.floor,
+                g: outerSegment.mapNum,
+                x: outerSegment.x,
+                y: outerSegment.y,
+                c: [], //only paths
+                // idB: innerSegment.id,
+                j: innerSegment.floor,
+                k: innerSegment.mapNum,
+                m: innerSegment.x,
+                n: innerSegment.y,
+                d: [], // only paths
+                l: outerSegment.l + innerSegment.l, // length is combined lengths
+                r: Infinity,
+                p: -1
+              };
 
               dataStore.q.push(portal);
             }
@@ -530,11 +556,14 @@
       }
 
       portalSegments = [];
-
     } // end function buildportals
 
-    //get the set of paths adjacent to a point or endpoint.
-    function getPointPaths(point) {
+    /**
+     * Get the set of paths adjacent to a point or endpoint.
+     *
+     */
+    function getPointPaths(point)
+    {
       var mapNum,
         pathNum,
         pointANum,
@@ -562,12 +591,18 @@
       }
 
       return pointPaths;
-    }
+    } // end function getPointPaths
 
-    function recursiveSearch(segmentType, segmentFloor, segment, length) {
-      //SegmentType is PAth or POrtal, segment floor limits search, segment is id per type and floor, length is total length of current thread
-      // for each path on this floor look at all the paths we know connect to it
-
+    /**
+     * For each path on this floor look at all the paths we know connect to it
+     *
+     * @param segmentType: PA (path) or PO (portal)
+     * @param segmentFloor: limits search
+     * @param segment: id per type and floor
+     * @param length: total length of current thread
+     */
+    function recursiveSearch(segmentType, segmentFloor, segment, length)
+    {
       // for each connection
       $.each(dataStore.p[segmentFloor][segment].c, function (i, tryPath) {
         // check and see if the current path is a shorter path to the new path
@@ -582,10 +617,8 @@
 
       // if the current path is connected to any portals
       if (dataStore.p[segmentFloor][segment].q.length > 0) {
-
         // look at each portal, tryPortal is portal index in portals
         $.each(dataStore.p[segmentFloor][segment].q, function (i, tryPortal) {
-
           if (length + dataStore.q[tryPortal].l < dataStore.q[tryPortal].r && (options.accessibleRoute === false || (options.accessibleRoute === true && dataStore.q[tryPortal].a))) {
             dataStore.q[tryPortal].r = length + dataStore.q[tryPortal].l;
             dataStore.q[tryPortal].p = segment;
@@ -617,9 +650,13 @@
           }
         });
       }
-    }
+    } // end function recursiveSearch
 
-    function generateRoutes() {
+    /**
+     *
+     */
+    function generateRoutes()
+    {
       var sourceInfo,
         mapNum,
         sourcemapNum;
@@ -638,11 +675,18 @@
         dataStore.p[sourcemapNum][pathId].p = 'point';
         recursiveSearch('pa', sourcemapNum, pathId, dataStore.p[sourcemapNum][pathId].l);
       });
-    }
+    } // end function generateRoutes
 
-
-    // from a given end point generate an array representing the reverse steps needed to reach destination along shortest path
-    function backTrack(segmentType, segmentFloor, segment) {
+    /**
+     * From a given end point generate an array representing the reverse steps needed
+     * to reach destination along shortest path
+     *
+     * @param segmentType
+     * @param segmentFloor
+     * @param segment
+     */
+    function backTrack(segmentType, segmentFloor, segment)
+    {
       var step;
 
       // if we aren't at the startpoint point
@@ -662,10 +706,14 @@
             break;
         }
       }
-    }
+    } // end function backTrack
 
-    function getShortestRoute() {
-
+    /**
+     *
+     * @returns {*}
+     */
+    function getShortestRoute()
+    {
       var destInfo,
         mapNum,
         destinationmapNum,
@@ -699,9 +747,14 @@
         solution.reverse();
       }
       return solution;
-    }
+    } // end function getShortestRoute
 
-    function build() {
+    /**
+     *
+     * @returns {{p: Array, q: Array}|*}
+     */
+    function build()
+    {
 
       dataStore = {
         'p': [], // paths
@@ -721,10 +774,13 @@
       return dataStore;
     } // function build
 
-    // Ensure a dataStore exists and is set, whether from a cache
-    // or by building it.
-    function establishDataStore(onReadyCallback) {
-
+    /**
+     * Ensure a dataStore exists and is set, whether from a cache or by building it.
+     *
+     * @param onReadyCallback
+     */
+    function establishDataStore(onReadyCallback)
+    {
       if (options.dataStoreCache) {
         if (typeof options.dataStoreCache === 'object') {
 
@@ -762,10 +818,15 @@
       }
     }
 
-    // Set the start point, and put a location indicator
-    // in that spot, if feature is enabled.
-    // if using dataStores then trigger loading of new datastore.
-    function setStartPoint(point, el) {
+    /**
+     * Set the start point, and put a location indicator in that spot, if feature is enabled.
+     * if using dataStores then trigger loading of new datastore.
+     *
+     * @param point
+     * @param el
+     */
+    function setStartPoint(point, el)
+    {
       var start,
         attachPinLocation,
         x,
@@ -802,9 +863,15 @@
           return; //start point does not exist
         }
       }
-    } //function setStartPoint
+    } //end function setStartPoint
 
-    function setEndPoint(endPoint, el) {
+    /**
+     *
+     * @param endPoint
+     * @param el
+     */
+    function setEndPoint(endPoint, el)
+    {
       var end,
         attachPinLocation,
         x,
@@ -829,10 +896,15 @@
           return; //end point does not exist
         }
       }
-    } //function setEndPoint
+    } //end function setEndPoint
 
-    // Set options based on either provided options or defaults
-    function getOptions(el) {
+    /**
+     * Set options based on either provided options or defaults
+     *
+     * @param el
+     */
+    function getOptions(el)
+    {
       var optionsPrior = el.data('wayfinding:options');
 
       drawing = el.data('wayfinding:drawing'); // load a drawn path, if it exists
@@ -865,17 +937,28 @@
       } else {
         startpoint = options.startpoint;
       }
-    } //function getOptions
+    } // end function getOptions
 
-    function setOptions(el) {
+    /**
+     *
+     * @param el
+     */
+    function setOptions(el)
+    {
 
       el.data('wayfinding:options', options);
       el.data('wayfinding:drawing', drawing);
       // need to handle cases where WayfindingDataStore isn't loaded if we are separating these out
       el.data('wayfinding:data', dataStore);
-    }
+    } // end function setOptions
 
-    function cleanupSVG(el) { // should only be called once instead of twice if initalize and build for non datastore
+    /**
+     * should only be called once instead of twice if initalize and build for non datastore
+     *
+     * @param el
+     */
+    function cleanupSVG(el)
+    {
       var svg = $(el).find('svg'),
         height = parseInt($(svg).attr('height').replace('px', '').split('.')[0], 10),
         width = parseInt($(svg).attr('width').replace('px', '').split('.')[0], 10);
@@ -898,11 +981,15 @@
           $(this).prop('id', oldID.slice(0, oldID.indexOf('_')));
         }
       });
-    } //function cleanupSVG
+    } //end function cleanupSVG
 
-    // Ensures '$el' has a valid jQuery.panzoom object
-    function initializePanZoom(el) {
-
+    /**
+     * Ensures '$el' has a valid jQuery.panzoom object
+     *
+     * @param el
+     */
+    function initializePanZoom(el)
+    {
       el.panzoom({
         minScale: 1.0,
         contain: 'invert',
@@ -913,11 +1000,16 @@
       el.find('a').on('mousedown touchstart', function (e) {
         e.stopImmediatePropagation();
       });
-    } //function initializePanZoom
+    } // end function initializePanZoom
 
-    // Hide SVG div, hide path lines (they're data, not visuals), make rooms clickable
-    function activateSVG(el, svgDiv) {
-
+    /**
+     * Hide SVG div, hide path lines (they're data, not visuals), make rooms clickable
+     *
+     * @param el
+     * @param svgDiv
+     */
+    function activateSVG(el, svgDiv)
+    {
       // Hide maps until explicitly displayed
       $(svgDiv).hide();
 
@@ -954,10 +1046,16 @@
       if (options.pinchToZoom) {
         initializePanZoom($(svgDiv));
       }
-    } //function activateSVG
+    } // end function activateSVG
 
-    // Called when animatePath() is switching the floor and also when
-    function switchFloor(floor, el) {
+    /**
+     * Called when animatePath() is switching the floor and also when
+     *
+     * @param floor
+     * @param el
+     */
+    function switchFloor(floor, el)
+    {
       var height = $(el).height();
 
       $(el).height(height); // preserve height as I'm not yet set switching
@@ -1004,16 +1102,31 @@
           $(drawing[level].path, el).animate({svgStrokeDashOffset: 0}, pathLength * options.path.speed); //or move minPath to global variable?
         }
       }
-    } //function switchFloor
+    } // end function switchFloor
 
-    function hidePath(el) {
+    /**
+     *
+     * @param el
+     */
+    function hidePath(el)
+    {
       $('path[class^=directionPath]', el).css({
         'stroke': 'none'
       });
-    }
+    } // end function hidePath
 
-    // Uses jQuery.panzoom to pan/zoom to the SVG viewbox coordinate equivalent of (x, y, w, h)
-    function panzoomWithViewBoxCoords(cssDiv, svg, x, y, w, h) {
+    /**
+     * Uses jQuery.panzoom to pan/zoom to the SVG viewbox coordinate equivalent of (x, y, w, h)
+     *
+     * @param cssDiv
+     * @param svg
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
+    function panzoomWithViewBoxCoords(cssDiv, svg, x, y, w, h)
+    {
 
       x = parseFloat(x);
       y = parseFloat(y);
@@ -1047,9 +1160,14 @@
 
       // Step 3, apply $.panzoom()
       $(cssDiv).panzoom('pan', fx * scale, fy * scale);
-    }
+    } // end function panzoomWithViewBoxCoords
 
-    function animatePath(drawingSegment) {
+    /**
+     *
+     * @param drawingSegment
+     */
+    function animatePath(drawingSegment)
+    {
       var path,
         svg,
         pathRect,
@@ -1063,7 +1181,8 @@
         newView = {},
         step;
 
-      function adjustIn(current, old, target, count, speed) {
+      function adjustIn(current, old, target, count, speed)
+      {
         setTimeout(function () {
           var zoomIn = {};
           zoomIn.X = interpolateValue(old.X, target.X, current, count);
@@ -1081,7 +1200,8 @@
         }, current * (speed / count));
       }
 
-      function adjustOut(current, old, target, count, speed) {
+      function adjustOut(current, old, target, count, speed)
+      {
         setTimeout(function () {
           var zoom = {};
           zoom.X = interpolateValue(target.X, old.X, current, count);
@@ -1102,6 +1222,29 @@
             }
           }
         }, current * (speed / count));
+      }
+
+      function floorChange()
+      {
+        animatePath(++drawingSegment);
+
+        if (options.zoomToRoute) {
+          // Loop the specified number of steps to create the zoom out animation
+          // or set step = steps to force the zoom out immediately (used on floors
+          // no longer visible to the user due to floor changes)
+
+          // Animate zoom out if we're on the last drawing segment, else
+          // we can just reset the zoom out (improves performance, user will never notice)
+          if ((drawing.length === 1) || ((drawing.length > 1) && (drawingSegment === drawing.length))) {
+            step = 0; // apply full animation
+          } else {
+            step = steps; // effectively removes animation and resets the zoom out (only triggered on floors where the user
+          }
+
+          for (step; step <= steps; step++) {
+            adjustOut(step, oldView, newView, steps, duration);
+          }
+        }
       }
 
       if (options.repeat && drawingSegment >= drawing.length) {
@@ -1169,36 +1312,34 @@
       }
 
 
-      // Call animatePath after 'animationDuration' milliseconds to animate the next segment of the path,
-      // if any.
-      // Note: This is not tiny path 'segments' which form the lines curving around
-      //       hallways but rather the other 'paths' needed on other floors, if any.
-      setTimeout(function () {
-        animatePath(++drawingSegment);
+      if(options.autoChangeFloor) {
+        // Call animatePath after 'animationDuration' milliseconds to animate the next segment of the path,
+        // if any.
+        // Note: This is not tiny path 'segments' which form the lines curving around
+        //       hallways but rather the other 'paths' needed on other floors, if any.
+        setTimeout(function () {
+          floorChange();
+        }, animationDuration + options.floorChangeAnimationDelay);
+      } else {
+        console.log(solution);
+        var $trigger = $(options.changeFloorTrigger);
+        // TODO: remove disabled only when first animation is complete
+        $trigger.show();
+        $trigger.on('click', function() {
+          floorChange();
+          $(this).hide();
+        });
+      }
+    } // end function animatePath
 
-        if (options.zoomToRoute) {
-          // Loop the specified number of steps to create the zoom out animation
-          // or set step = steps to force the zoom out immediately (used on floors
-          // no longer visible to the user due to floor changes)
-
-          // Animate zoom out if we're on the last drawing segment, else
-          // we can just reset the zoom out (improves performance, user will never notice)
-          if ((drawing.length === 1) || ((drawing.length > 1) && (drawingSegment === drawing.length))) {
-            step = 0; // apply full animation
-          } else {
-            step = steps; // effectively removes animation and resets the zoom out (only triggered on floors where the user
-          }
-
-          for (; step <= steps; step++) {
-            adjustOut(step, oldView, newView, steps, duration);
-          }
-        }
-      }, animationDuration + options.floorChangeAnimationDelay);
-    } //function animatePath
-
-    // The combined routing function
-    // revise to only interate if startpoint has changed since last time?
-    function routeTo(destination, el) {
+    /**
+     * The combined routing function
+     *
+     * @param destination
+     * @param el
+     */
+    function routeTo(destination, el)
+    {
       var i,
         draw,
         stepNum,
@@ -1206,21 +1347,11 @@
         reversePathStart,
         portalsEntered,
         lastStep,
-        ax,
-        ay,
-        bx,
-        by,
-        aDX,
-        aDY,
-        bDX,
-        bDY,
-        cx,
-        cy,
-        px,
-        py,
+        ax, ay, bx, by,
+        aDX, aDY, bDX, bDY,
+        cx, cy, px, py,
         curve,
-        nx,
-        ny,
+        nx, ny,
         thisPath,
         pick;
 
@@ -1458,7 +1589,6 @@
               newPath.setAttribute('class', 'directionPath' + j);
             }
 
-
             // Attach the newpath to the startpin or endpin if they exist on this floor
             var attachPointSvg = $('#' + maps[map[0].floor].id + ' svg');
             var startPin = $('.startPin', attachPointSvg);
@@ -1486,9 +1616,14 @@
           //notify animation loop?
         }
       }
-    } //RouteTo
+    } //end function RouteTo
 
-    function replaceLoadScreen(el) {
+    /**
+     *
+     * @param el
+     */
+    function replaceLoadScreen(el)
+    {
       var displayNum,
         mapNum;
 
@@ -1515,10 +1650,16 @@
       }
 
       $.event.trigger('wayfinding:ready');
-    } //function replaceLoadScreen
+    } // end function replaceLoadScreen
 
-    // Initialize the jQuery target object
-    function initialize(el, cb) {
+    /**
+     * Initialize the jQuery target object
+     *
+     * @param el
+     * @param cb
+     */
+    function initialize(el, cb)
+    {
       var mapsProcessed = 0;
 
       $('div:not("#WayfindingStatus")', el).remove();
@@ -1562,8 +1703,7 @@
           }
         );
       });
-
-    } // function initialize
+    } // end function initialize
 
     if (action && typeof (action) === 'object') {
       if (typeof options === 'function') {
@@ -1584,29 +1724,11 @@
       // Handle actions
       if (action && typeof (action) === 'string') {
         switch (action) {
-
           /**
            * @function wayfinding
            * @memberOf wayfinding
            * @param {object} settings an object holding the settings to initialize the plugin with
            * @param {function} [callback] optional callback that gets called once setup is completed.
-           * @example
-           * $('#myMaps').wayfinding({
-                     * 	'maps': [
-                     * 		{'path': 'test/fixtures/demo_map_1.svg', 'id': 'floor1'},
-                     * 		{'path': 'test/fixtures/demo_map_2.svg', 'id': 'floor2'}
-                     * 	],
-                     * 	'startpoint': function () {
-                     * 		return 'lcd.1';
-                     * 	},
-                     * 	'defaultMap': 'floor1',
-                     * }, function(){
-                     * 	console.log('callback reached');
-                     * });
-           */
-
-          /**
-           * @todo build out the rest of the options in the non maps version of the call
            */
 
           case 'initialize':
@@ -1652,13 +1774,6 @@
            * @param {string} newStartPoint a point ID specifying a new starting location
            * @param {function} [callback]
            * @example $('target').wayfinding('startpoint', 'R1001');
-           */
-
-          /**
-           * @function startpoint
-           * @memberOf wayfinding
-           * @param {function} newStartPointFunction a point ID specifying a new starting location
-           * @param {function} [callback]
            * @example $('target').wayfinding('startpoint', startpointFunction);
            */
           case 'startpoint':
@@ -1670,6 +1785,7 @@
               establishDataStore(callback);
             }
             break;
+
           case 'currentMap':
             // return and set
             if (passed === undefined) {
@@ -1678,6 +1794,7 @@
               switchFloor(passed, obj);
             }
             break;
+
           case 'accessibleRoute':
             // return and set
             if (passed === undefined) {
@@ -1692,18 +1809,10 @@
            * @function path
            * @name path
            * @memberOf wayfinding
+           * @param {pathtype} nameNotSpecified sets options.path
            * @Returns optional path if no param is passed
            * @example getPath = $('target').wayfinding('path');
            */
-
-          /**
-           * @function path
-           * @name path
-           * @memberOf wayfinding
-           * @param {pathtype} nameNotSpecified sets options.path
-           * @Returns optional path if no param is passed
-           */
-
           case 'path':
             // return and set
             if (passed === undefined) {
@@ -1720,7 +1829,6 @@
            * @returns {string} a JSON object representing the current state of the map for a given startpoint and accessibility setting
            * @example capture = $('target').wayfinding('getDataStore');
            */
-
           case 'getDataStore':
             //shows JSON version of dataStore when called from console.
             //To facilitate caching dataStore.
@@ -1745,5 +1853,4 @@
     return this;
   };
 }(jQuery));
-
 //  ]]>
