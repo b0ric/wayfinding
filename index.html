@@ -12,58 +12,64 @@
 		<div id="content">
 			<div id="myMaps">
 			</div>
-			<div id="controls">
-                <div class="control-block">
-                    <label>Show</label>
-                    <button id="floor1" class="floor-buttons">1st Floor</button>
-                    <button id="floor2" class="floor-buttons">2nd Floor</button>
-                    <button id="floor3" class="floor-buttons">3rd Floor</button>
+			<div id="controls" class="clearfix">
+                <div class="left-controls">
+                    <div class="control-block">
+                        <label>Show</label>
+                        <button id="floor1" class="floor-buttons">1st Floor</button>
+                        <button id="floor2" class="floor-buttons">2nd Floor</button>
+                        <button id="floor3" class="floor-buttons">3rd Floor</button>
+                    </div>
+                    <div class="control-block">
+                        <label for="beginSelect">Begin route at</label>
+                        <select id="beginSelect">
+                            <option value="lcd.1">Reception</option>
+                            <option value="lobby">Lobby</option>
+                            <option value="R123">Conf Room</option>
+                        </select>
+                        <label for="endSelect">Show route to</label>
+                        <select id="endSelect">
+                            <option></option>
+                            <option disabled="true">West 1st</option>
+                            <option value="R101">101</option>
+                            <option value="R102">102</option>
+                            <option value="R103">103</option>
+                            <option value="R104">104</option>
+                            <option disabled="true">East 1st</option>
+                            <option value="R111">111</option>
+                            <option value="R112">112</option>
+                            <option value="R113">113</option>
+                            <option value="R114">114</option>
+                            <option disabled="true">North 1st</option>
+                            <option value="R121">121</option>
+                            <option value="R122">122</option>
+                            <option value="R123">123</option>
+                            <option value="R124">124</option>
+                            <option value="R125">125</option>
+                            <option disabled="true">2nd</option>
+                            <option value="R201">201</option>
+                            <option value="R202">202</option>
+                            <option disabled="true">3rd</option>
+                            <option value="R301">301</option>
+                            <option value="R302">302</option>
+                        </select>
+                        <label for="accessible">Accessible</label>
+                        <input id="accessible" type="checkbox" name="accessible" value="Accessible" />
+                    </div>
+                    <div class="control-block">
+                        <button id="toggle-paths">Show/hide paths</button>
+                        <button id="toggle-portals">Show/hide portals</button>
+                        <button id="toggle-points">Show/hide doors</button>
+                    </div>
                 </div>
-                <div class="control-block">
-                    <label for="beginSelect">Begin route at</label>
-                    <select id="beginSelect">
-                        <option value="lcd.1">Reception</option>
-                        <option value="lobby">Lobby</option>
-                        <option value="R123">Conf Room</option>
-                    </select>
-                    <label for="endSelect">Show route to</label>
-                    <select id="endSelect">
-                        <option></option>
-                        <option disabled="true">West 1st</option>
-                        <option value="R101">101</option>
-                        <option value="R102">102</option>
-                        <option value="R103">103</option>
-                        <option value="R104">104</option>
-                        <option disabled="true">East 1st</option>
-                        <option value="R111">111</option>
-                        <option value="R112">112</option>
-                        <option value="R113">113</option>
-                        <option value="R114">114</option>
-                        <option disabled="true">North 1st</option>
-                        <option value="R121">121</option>
-                        <option value="R122">122</option>
-                        <option value="R123">123</option>
-                        <option value="R124">124</option>
-                        <option value="R125">125</option>
-                        <option disabled="true">2nd</option>
-                        <option value="R201">201</option>
-                        <option value="R202">202</option>
-                        <option disabled="true">3rd</option>
-                        <option value="R301">301</option>
-                        <option value="R302">302</option>
-                    </select>
-                    <label for="accessible">Accessible</label>
-                    <input id="accessible" type="checkbox" name="accessible" value="Accessible" />
+                <div class="right-controls">
+                    <p id="directions"></p>
+                    <button id="change-floor" style="display: none;">Next floor</button>
+                    <button id="next-step">Next step</button>
                 </div>
-                <div class="control-block">
-				    <button id="change-floor" style="display: none;">Next floor</button>
-                    <button id="toggle-paths">Show/hide paths</button>
-                    <button id="toggle-portals">Show/hide portals</button>
-                    <button id="toggle-points">Show/hide doors</button>
-                </div>
-			</div>
+            </div>
 		</div>
-		<div>
+		<div class="clearfix">
 			<h1>Wayfinding Demo</h1>
 			<p>For more information see <a href="https://github.com/o2web/wayfinding">https://github.com/o2web/wayfinding</a> or <a href="https://github.com/ucdavis/wayfinding">https://github.com/ucdavis/wayfinding</a></p>
 		</div>
@@ -131,19 +137,19 @@
 				});
 
                 $("#toggle-paths").on('click', function() {
-                    var op = (pathsOpacity === 1) ? 0 : 1;
-                    $('#Paths line').attr('stroke-opacity', op);
+                    pathsOpacity = (pathsOpacity === 1) ? 0 : 1;
+                    $('#Paths line').attr('stroke-opacity', pathsOpacity);
                     return false;
                 });
 
                 $("#toggle-portals").on('click', function() {
-                    var op = (portalsOpacity === 1) ? 0 : 1;
-                    $('#Portals circle').attr('fill-opacity', op);
+                    portalsOpacity = (portalsOpacity === 1) ? 0 : 1;
+                    $('#Portals circle').attr('fill-opacity', portalsOpacity);
                     return false;
                 });
                 $("#toggle-points").on('click', function() {
-                    var op = (pointsOpacity === 1) ? 0 : 1;
-                    $('#Points circle').attr('fill-opacity', op);
+                    pointsOpacity = (pointsOpacity === 1) ? 0 : 1;
+                    $('#Points circle').attr('fill-opacity', pointsOpacity);
                     return false;
                 });
 

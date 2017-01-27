@@ -23,6 +23,16 @@ body {
 	z-index:-1;
 }
 
+.left-controls {
+	float: left;
+	width: 50%;
+}
+
+.right-controls {
+	float: right;
+	width: 50%;
+}
+
 .control-block {
 	display: block;
 	padding: 10px;
@@ -64,4 +74,10 @@ g.startPin path {
 
 g.destinationPin path {
 	/*fill: green;*/
+}
+
+.clearfix:after {
+	content:" ";
+	display:table;
+	clear:both;
 }
