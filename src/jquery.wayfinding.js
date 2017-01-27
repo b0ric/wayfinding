@@ -391,7 +391,8 @@
           e: [],
           ar: ar,
           c: [], //other paths
-          q: [] // connected portals
+          q: [], // connected portals
+          checkpoint: $(this).data('checkpoint')
         };
         path.l = Math.sqrt(Math.pow(path.x - path.m, 2) + Math.pow(path.y - path.n, 2));
 
@@ -690,8 +691,8 @@
         step.type = segmentType;
         step.floor = segmentFloor;
         step.segment = segment;
+        step.checkpoint = (dataStore.p[segmentFloor][segment].checkpoint === true) ? true : false;
         solution.push(step);
-
         switch (segmentType) {
           case 'pa':
             backTrack(dataStore.p[segmentFloor][segment].o, segmentFloor, dataStore.p[segmentFloor][segment].p);
@@ -1060,7 +1061,7 @@
         $(el).trigger('wayfinding:floorChanged', {mapId: floor});
       });
 
-      //turn floor into mapNum, look for that in drawing
+      // turn floor into mapNum, look for that in drawing
       // if there get drawing[level].routeLength and use that.
 
       var i, level, mapNum, pathLength;
@@ -1240,6 +1241,13 @@
           }
         }
       }
+        console.log(drawing)
+
+      function nextStep()
+      {
+        drawingSegment++;
+        animatePath(drawingSegment);
+      }
 
       if (options.repeat && drawingSegment >= drawing.length) {
         // if repeat is set, then delay and rerun display from first.
@@ -1255,7 +1263,6 @@
 
       var mapIdx = drawing[drawingSegment][0].floor;
       svg = $('#' + maps[mapIdx].id + ' svg')[0];
-
       drawLength = drawing[drawingSegment].routeLength;
       animationDuration = drawLength * options.path.speed;
 
@@ -1307,20 +1314,22 @@
 
 
       if(options.autoChangeFloor) {
-        // Call animatePath after 'animationDuration' milliseconds to animate the next segment of the path,
-        // if any.
+        // Call animatePath after 'animationDuration' milliseconds to animate the next segment of the path, if any.
         // Note: This is not tiny path 'segments' which form the lines curving around
         //       hallways but rather the other 'paths' needed on other floors, if any.
         setTimeout(function () {
           floorChange();
         }, animationDuration + options.floorChangeAnimationDelay);
       } else {
+        $("#next-step").on('click', nextStep);
         if(solution[0].floor !== solution[solution.length -1].floor) {
           var $trigger = $(options.changeFloorTrigger);
           $trigger.show();
+          setRouteMessage('Please use the button to continue...')
           $trigger.on('click', function() {
             floorChange();
             $(this).hide();
+            setRouteMessage('You are now on the other floor!')
           });
         }
       }
@@ -1378,7 +1387,7 @@
           }
 
           //break this into a new function?
-          drawing = new Array(portalsEntered); // Problem at line 707 character 40: Use the array literal notation [].
+          drawing = new Array(portalsEntered);
           drawing[0] = [];
           draw = {};
 
@@ -1432,9 +1441,10 @@
                 ay = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].y;
                 bx = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].m;
                 by = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].n;
-
                 draw = {};
+
                 draw.floor = solution[stepNum].floor;
+
                 if (drawing[i].slice(-1)[0].x === ax && drawing[i].slice(-1)[0].y === ay) {
                   draw.x = bx;
                   draw.y = by;
@@ -1442,13 +1452,14 @@
                   draw.x = ax;
                   draw.y = ay;
                 }
+
                 draw.length = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].l;
                 draw.type = 'L';
                 drawing[i].push(draw);
                 drawing[i].routeLength += draw.length;
               }
 
-              if (solution[stepNum].type === 'po') {
+              if (solution[stepNum].type === 'po' || solution[stepNum].checkpoint) {
                 drawing[i + 1] = [];
                 drawing[i + 1].routeLength = 0;
                 // push the first object on
@@ -1607,6 +1618,15 @@
         }
       }
     } //end function RouteTo
+
+    /**
+     *
+     *
+     */
+    function setRouteMessage(message)
+    {
+      $("#directions").html(message)
+    }
 
     /**
      *
