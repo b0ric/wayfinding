@@ -149,7 +149,7 @@
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="273" x2="315" y2="273"/>
-	<line data-accessible-route="false" fill="none" stroke="#FF0000" x1="342" y1="264" x2="342" y2="336"/>
+	<line data-checkpoint="true" data-accessible-route="false" fill="none" stroke="#FF0000" x1="342" y1="264" x2="342" y2="336"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="336" x2="261" y2="264"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="264" x2="243" y2="255"/>
 	<line fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>
@@ -157,12 +157,12 @@
 	<line fill="none" stroke="#00FFFF" x1="99" y1="336" x2="99" y2="381"/>
 	<line fill="none" stroke="#00FFFF" x1="99" y1="381" x2="261" y2="381"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="381" x2="261" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="297" y1="354" x2="297" y2="381"/>
+	<line fill="none" stroke="#FFB6C1" x1="297" y1="354" x2="297" y2="381"/>
 	<line data-accessible-route="false" fill="none" stroke="#FF0000" x1="333" y1="174" x2="333" y2="120"/>
 	<line fill="none" stroke="#00FFFF" x1="333" y1="120" x2="342" y2="102"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="336" x2="243" y2="327"/>
 	<line fill="none" stroke="#00FFFF" x1="342" y1="336" x2="360" y2="345"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="264" x2="360" y2="273"/>
+	<line fill="none" stroke="#00FF00" x1="342" y1="264" x2="360" y2="273"/>
 	<line fill="none" stroke="#00FFFF" x1="342" y1="192" x2="261" y2="192"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="192" x2="270" y2="174"/>
 	<line fill="none" stroke="#00FFFF" x1="342" y1="192" x2="333" y2="174"/>
@@ -210,7 +210,7 @@
 	<line fill="none" stroke="#00FFFF" x1="504" y1="336" x2="486" y2="327"/>
 	<line fill="none" stroke="#00FFFF" x1="504" y1="336" x2="504" y2="381"/>
 	<line fill="none" stroke="#00FFFF" x1="504" y1="381" x2="342" y2="381"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="381" x2="342" y2="336"/>
-	<line fill="none" stroke="#00FFFF" x1="342" y1="381" x2="297" y2="381"/>
+	<line fill="none" stroke="#FFFF00" x1="342" y1="381" x2="342" y2="336"/>
+	<line fill="none" stroke="#0000FF" x1="342" y1="381" x2="297" y2="381"/>
 </g>
 </svg>
