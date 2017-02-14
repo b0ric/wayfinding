@@ -1241,13 +1241,6 @@
           }
         }
       }
-        console.log(drawing)
-
-      function nextStep()
-      {
-        drawingSegment++;
-        animatePath(drawingSegment);
-      }
 
       if (options.repeat && drawingSegment >= drawing.length) {
         // if repeat is set, then delay and rerun display from first.
@@ -1321,7 +1314,6 @@
           floorChange();
         }, animationDuration + options.floorChangeAnimationDelay);
       } else {
-        $("#next-step").on('click', nextStep);
         if(solution[0].floor !== solution[solution.length -1].floor) {
           var $trigger = $(options.changeFloorTrigger);
           $trigger.show();
@@ -1333,7 +1325,111 @@
           });
         }
       }
+
+      getWording(solution, mapIdx);
     } // end function animatePath
+
+    function getWording(solution, currentFloor)
+    {
+      var stepLength;
+      var realLength;
+      var angle;
+      var directions = [];
+
+      for (var stepNum = 0; stepNum < solution.length; stepNum++) {
+        if(solution[stepNum].floor === currentFloor) {
+
+          stepLength = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].l;
+          realLength = Math.round(stepLength / 7) + ' mètres';
+          angle = getAngle(solution, stepNum);
+
+          switch(true) {
+            case (angle < -30 && angle > -120):
+              directions.push('Marchez ' + realLength + ' puis tournez à gauche');
+              break;
+            case (angle <= -120 && angle > -150):
+              directions.push('Marchez ' + realLength + ' puis tournez légèrement à gauche');
+              break;
+            case (angle === 180 || angle <= -150 && angle >= 150):
+              directions.push('Marchez ' + realLength + ' puis continuez tout droit');
+              break;
+            case (angle > 150 && angle >= 120):
+              directions.push('Marchez ' + realLength + ' puis tournez légèrement à droite');
+              break;
+            case (angle < 120 && angle > 30):
+              directions.push('Marchez ' + realLength + ' puis tournez à droite');
+              break;
+            default:
+              break;
+          }
+
+          if(stepNum === solution.length-1) {
+            directions.push('Vous êtes arrivé à votre destination');
+          }
+        }
+      }
+      console.log(directions);
+    }
+
+    function getAngle(solution, stepNum)
+    {
+      var nextStep, ab, bc, ac, cos, angle, factor,
+        currSegment, nextSegment,
+        ax, ay, bx, by, cx, cy;
+      nextStep = stepNum +1;
+
+      if(solution[nextStep] !== undefined) {
+        currSegment = dataStore.p[solution[stepNum].floor][solution[stepNum].segment];
+        nextSegment = dataStore.p[solution[nextStep].floor][solution[nextStep].segment];
+
+        if(currSegment.x === nextSegment.x && currSegment.y === nextSegment.y) {
+          ax = currSegment.m;
+          ay = currSegment.n;
+          bx = currSegment.x;
+          by = currSegment.y;
+          cx = nextSegment.m;
+          cy = nextSegment.n;
+        } else if(currSegment.m === nextSegment.x && currSegment.n === nextSegment.y) {
+          ax = currSegment.x;
+          ay = currSegment.y;
+          bx = currSegment.m;
+          by = currSegment.n;
+          cx = nextSegment.m;
+          cy = nextSegment.n;
+        } else if(currSegment.x === nextSegment.m && currSegment.y === nextSegment.n) {
+          ax = currSegment.m;
+          ay = currSegment.n;
+          bx = currSegment.x;
+          by = currSegment.y;
+          cx = nextSegment.x;
+          cy = nextSegment.y;
+        } else if  (currSegment.m === nextSegment.m && currSegment.n === nextSegment.n) {
+          ax = currSegment.x;
+          ay = currSegment.y;
+          bx = currSegment.m;
+          by = currSegment.n;
+          cx = nextSegment.x;
+          cy = nextSegment.y;
+        }
+
+        if(( bx > cx && ay > by ) || ( ax > bx && by < cy) || ( bx < cx && ay < by ) || ( ax < bx && by > cy)) {
+          factor = -1;
+        } else if(( bx < cx && ay > by ) || ( ax < bx && by < cy ) || ( bx > cx && ay < by ) || ( ax > bx && by > cy )) {
+          factor = 1;
+        } else {
+          factor = 1;
+        }
+
+        ab = Math.sqrt(Math.pow(bx-ax, 2) + Math.pow(by-ay, 2));
+        bc = Math.sqrt(Math.pow(bx-cx, 2) + Math.pow(by-cy, 2));
+        ac = Math.sqrt(Math.pow(cx-ax, 2) + Math.pow(cy-ay, 2));
+        cos = Math.acos((bc*bc+ab*ab-ac*ac)/(2*bc*ab));
+        angle = (cos * 180) / Math.PI;
+
+        return angle * factor;
+      }
+      return 0;
+    }
 
     /**
      * The combined routing function
@@ -1459,7 +1555,7 @@
                 drawing[i].routeLength += draw.length;
               }
 
-              if (solution[stepNum].type === 'po' || solution[stepNum].checkpoint) {
+              if (solution[stepNum].type === 'po') {
                 drawing[i + 1] = [];
                 drawing[i + 1].routeLength = 0;
                 // push the first object on
