@@ -1174,7 +1174,7 @@
         duration = 650, // Zoom animation in milliseconds
         oldView = {},
         newView = {},
-        step;
+        step, directions;
 
       function adjustIn(current, old, target, count, speed)
       {
@@ -1263,7 +1263,7 @@
 
       // Get the complete path for this particular floor-route
       path = $('#' + maps[drawing[drawingSegment][0].floor].id + ' .directionPath' + drawingSegment)[0];
-
+      console.log(options);
       // Animate using CSS transitions
       // SVG animation technique from http://jakearchibald.com/2013/animated-line-drawing-svg/
       path.style.stroke = options.path.color;
@@ -1321,43 +1321,46 @@
           $trigger.on('click', function() {
             floorChange();
             $(this).hide();
-            setRouteMessage('You are now on the other floor!')
           });
         }
       }
 
-      getWording(solution, mapIdx);
+      directions = getWording(solution, mapIdx);
+      setRouteMessage(directions);
     } // end function animatePath
 
     function getWording(solution, currentFloor)
     {
       var stepLength;
-      var realLength;
+      var distance = 0;
       var angle;
       var directions = [];
 
       for (var stepNum = 0; stepNum < solution.length; stepNum++) {
         if(solution[stepNum].floor === currentFloor) {
-
           stepLength = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].l;
-          realLength = Math.round(stepLength / 7) + ' mètres';
+          distance += Math.round(stepLength / 7);
           angle = getAngle(solution, stepNum);
 
           switch(true) {
             case (angle < -30 && angle > -120):
-              directions.push('Marchez ' + realLength + ' puis tournez à gauche');
+              directions.push('Marchez ' + distance + ' mètres puis tournez à gauche');
+              distance = 0;
               break;
             case (angle <= -120 && angle > -150):
-              directions.push('Marchez ' + realLength + ' puis tournez légèrement à gauche');
+              directions.push('Marchez ' + distance + ' mètres puis tournez légèrement à gauche');
+              distance = 0;
               break;
             case (angle === 180 || angle <= -150 && angle >= 150):
-              directions.push('Marchez ' + realLength + ' puis continuez tout droit');
+              // directions.push('Marchez ' + distance + ' mètres puis continuez tout droit');
               break;
             case (angle > 150 && angle >= 120):
-              directions.push('Marchez ' + realLength + ' puis tournez légèrement à droite');
+              directions.push('Marchez ' + distance + ' mètres puis tournez légèrement à droite');
+              distance = 0;
               break;
             case (angle < 120 && angle > 30):
-              directions.push('Marchez ' + realLength + ' puis tournez à droite');
+              directions.push('Marchez ' + distance + ' mètres puis tournez à droite');
+              distance = 0;
               break;
             default:
               break;
@@ -1366,9 +1369,12 @@
           if(stepNum === solution.length-1) {
             directions.push('Vous êtes arrivé à votre destination');
           }
+        } else if(directions.length > 0) {
+          directions.push('Rendez-vous à l\'étage ' + dataStore.p[solution[stepNum].floor][solution[stepNum].segment].floor);
+          break;
         }
       }
-      console.log(directions);
+      return directions;
     }
 
     function getAngle(solution, stepNum)
@@ -1719,9 +1725,16 @@
      *
      *
      */
-    function setRouteMessage(message)
+    function setRouteMessage(directions)
     {
-      $("#directions").html(message)
+      if(directions.length > 0) {
+        var html = '<ul>';
+        for(var i = 0; i < directions.length; i++) {
+          html += '<li>' + directions[i] + '</li>';
+        }
+        html += '</ul>';
+        $("#directions").html(html);
+      }
     }
 
     /**
