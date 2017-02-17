@@ -103,9 +103,15 @@
     'zoomToRoute': false,
     'zoomPadding': 25,
     'autoChangeFloor': false, // change floor automatically or require a user's action
-    'changeFloorTrigger': '#change-floor',
-    'floorChangeAnimationDelay': 1250 // milliseconds to wait during animation when a floor change occurs
+    'changeFloorTrigger': '#change-floor', // selector of the trigger element
+    'floorChangeAnimationDelay': 1250, // milliseconds to wait during animation when a floor change occurs
+    // directions output
+    'directionsContainer': '#directions', // selector of the directions container
+    'directionsClass': '', // class for the ul containing the directions
+    'directionsLanguage': 'en',
+    'mapRatio': 7, // ratio used to calculate distances
   },
+  instructions,
   dataStore;
 
   // should array of arrays be looked into
@@ -783,6 +789,7 @@
 
       buildPortals();
       generateRoutes();
+      getInstructions(options.directionsLanguage);
 
       return dataStore;
     } // function build
@@ -1361,28 +1368,28 @@
           var direction = '';
           checkpoint = getCheckpoint(currentFloor, stepNum);
           stepLength = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].l;
-          distance += Math.round(stepLength / 7);
+          distance += Math.round(stepLength / options.mapRatio);
           angle = getAngle(solution, stepNum);
 
           switch(true) {
             case (angle < -30 && angle > -120):
-              direction = 'Marchez ' + distance + ' mètres puis tournez à gauche';
+              direction = instructions['left'].replace('#{distance}', distance);
               distance = 0;
               break;
             case (angle <= -120 && angle > -150):
-              direction = 'Marchez ' + distance + ' mètres puis tournez légèrement à gauche';
+              direction = instructions['slight_left'].replace('#{distance}', distance);
               distance = 0;
               break;
             case (angle < 150 && angle >= 120):
-              direction = 'Marchez ' + distance + ' mètres puis tournez légèrement à droite';
+              direction = instructions['slight_right'].replace('#{distance}', distance);
               distance = 0;
               break;
             case (angle < 120 && angle > 30):
-              direction = 'Marchez ' + distance + ' mètres puis tournez à droite';
+              direction = instructions['right'].replace('#{distance}', distance);
               distance = 0;
               break;
             case ((angle <= -150 && angle >= -180) || (angle >= 150 && angle <= 180) && checkpoint !== false):
-              direction = 'Marchez ' + distance + ' mètres et continuez passé le ' + checkpoint.name;
+              instructions['straight_by_checkpoint'].replace('#{distance}', distance).replace('#{checkpoint_name}', checkpoint.name);
               distance = 0;
               checkpoint = false;
               break;
@@ -1401,10 +1408,11 @@
           }
 
           if(stepNum === solution.length-1) {
-            directions.push('Vous êtes arrivé à votre destination');
+            directions.push(instructions['arrive_at_dest']);
           }
         } else if(directions.length > 0) {
-          directions.push('Rendez-vous à l\'étage ' + dataStore.p[solution[stepNum].floor][solution[stepNum].segment].floor);
+          direction = instructions['change_floor'].replace('#{destination_floor}', dataStore.p[solution[stepNum].floor][solution[stepNum].segment].floor);
+          directions.push(direction);
           break;
         }
       }
@@ -1789,15 +1797,21 @@
     function setRouteMessage(directions)
     {
       if(directions.length > 0) {
-        var html = '<ul>';
+        var html = '<ul class="'+options.directionsClass+'">';
         for(var i = 0; i < directions.length; i++) {
           html += '<li>' + directions[i] + '</li>';
         }
         html += '</ul>';
-        $("#directions").html(html);
+        $(options.directionsContainer).html(html);
       }
     }
 
+    function getInstructions(lang)
+    {
+      $.getJSON('/src/locales/instructions_'+lang+'.json', function(data) {
+        instructions = data;
+      });
+    }
     /**
      *
      * @param el
