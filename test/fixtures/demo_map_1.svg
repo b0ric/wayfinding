@@ -131,7 +131,7 @@
 	<circle data-destination="" id="lobby" cx="297" cy="408" r="2"/>
 	<circle data-destination="" id="R121_1_" cx="117" cy="156" r="2"/>
 	<circle data-destination="" id="R122_1_" cx="207" cy="120" r="2"/>
-	<circle data-destination="" id="R123_4_" cx="270" cy="120" r="2"/>
+	<circle data-destination="" id="RLa 123_4_" cx="270" cy="120" r="2"/>
 	<circle data-destination="" id="R123_3_" cx="270" cy="174" r="2"/>
 	<circle data-destination="" id="R123_2_" cx="333" cy="120" r="2"/>
 	<circle data-destination="" id="R123_1_" cx="333" cy="174" r="2"/>
@@ -146,10 +146,12 @@
 	<circle data-destination="" id="R125_1_" cx="486" cy="138" r="2"/>
 	<circle data-destination="" id="R124_1_" cx="378" cy="120" r="2"/>
 	<circle data-destination="" id="lcd.1" cx="297" cy="354" r="2"/>
+
+    <circle id="cp-73737" data-checkpoint="" data-name="checkpoint1" cx="342" cy="381" r="5"/>
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="273" x2="315" y2="273"/>
-	<line data-checkpoint="true" data-accessible-route="false" fill="none" stroke="#FF0000" x1="342" y1="264" x2="342" y2="336"/>
+	<line data-accessible-route="false" fill="none" stroke="#FF0000" x1="342" y1="264" x2="342" y2="336"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="336" x2="261" y2="264"/>
 	<line fill="none" stroke="#00FFFF" x1="261" y1="264" x2="243" y2="255"/>
 	<line fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>

@@ -372,7 +372,8 @@
     function buildDataStore(mapNum, map, el)
     {
       var path, pointId, cx, cy,
-        matches, portal, portalId, ar;
+        matches, portal, portalId, ar,
+        checkpoint, checkpointName;
 
       dataStore.p[mapNum] = [];
 
@@ -448,6 +449,22 @@
         portal.l = Math.sqrt(Math.pow(cx, 2) + Math.pow(cy, 2));
         portalSegments.push(portal);
       });
+
+      // Checkpoints:
+      dataStore.c[mapNum] = {};
+      $('#Points circle[data-checkpoint]', el).each(function () { // index, line
+        cx = $(this).attr('cx');
+        cy = $(this).attr('cy');
+        checkpoint = {
+          id: $(this).attr('id'),
+          cx: cx,
+          cy: cy,
+          name: $(this).data('name')
+        };
+
+        dataStore.c[mapNum][cx+'-'+cy] = checkpoint;
+      });
+
     } // function buildDataStore
 
     /**
@@ -753,7 +770,8 @@
 
       dataStore = {
         'p': [], // paths
-        'q': [] // portals
+        'q': [], // portals
+        'c': [] // checkpoints
       };
 
       portalSegments = [];
@@ -1263,7 +1281,7 @@
 
       // Get the complete path for this particular floor-route
       path = $('#' + maps[drawing[drawingSegment][0].floor].id + ' .directionPath' + drawingSegment)[0];
-      console.log(options);
+
       // Animate using CSS transitions
       // SVG animation technique from http://jakearchibald.com/2013/animated-line-drawing-svg/
       path.style.stroke = options.path.color;
@@ -1317,7 +1335,7 @@
         if(solution[0].floor !== solution[solution.length -1].floor) {
           var $trigger = $(options.changeFloorTrigger);
           $trigger.show();
-          setRouteMessage('Please use the button to continue...')
+          setRouteMessage(['Please use the button to continue...'])
           $trigger.on('click', function() {
             floorChange();
             $(this).hide();
@@ -1331,39 +1349,55 @@
 
     function getWording(solution, currentFloor)
     {
+
       var stepLength;
       var distance = 0;
       var angle;
       var directions = [];
+      var checkpoint;
 
       for (var stepNum = 0; stepNum < solution.length; stepNum++) {
         if(solution[stepNum].floor === currentFloor) {
+          var direction = '';
+          checkpoint = getCheckpoint(currentFloor, stepNum);
           stepLength = dataStore.p[solution[stepNum].floor][solution[stepNum].segment].l;
           distance += Math.round(stepLength / 7);
           angle = getAngle(solution, stepNum);
 
           switch(true) {
             case (angle < -30 && angle > -120):
-              directions.push('Marchez ' + distance + ' mètres puis tournez à gauche');
+              direction = 'Marchez ' + distance + ' mètres puis tournez à gauche';
               distance = 0;
               break;
             case (angle <= -120 && angle > -150):
-              directions.push('Marchez ' + distance + ' mètres puis tournez légèrement à gauche');
+              direction = 'Marchez ' + distance + ' mètres puis tournez légèrement à gauche';
               distance = 0;
               break;
-            case (angle === 180 || angle <= -150 && angle >= 150):
-              // directions.push('Marchez ' + distance + ' mètres puis continuez tout droit');
-              break;
-            case (angle > 150 && angle >= 120):
-              directions.push('Marchez ' + distance + ' mètres puis tournez légèrement à droite');
+            case (angle < 150 && angle >= 120):
+              direction = 'Marchez ' + distance + ' mètres puis tournez légèrement à droite';
               distance = 0;
               break;
             case (angle < 120 && angle > 30):
-              directions.push('Marchez ' + distance + ' mètres puis tournez à droite');
+              direction = 'Marchez ' + distance + ' mètres puis tournez à droite';
               distance = 0;
               break;
-            default:
+            case ((angle <= -150 && angle >= -180) || (angle >= 150 && angle <= 180) && checkpoint !== false):
+              direction = 'Marchez ' + distance + ' mètres et continuez passé le ' + checkpoint.name;
+              distance = 0;
+              checkpoint = false;
               break;
+            default:
+              // Do nothing
+              break;
+          }
+
+          if(checkpoint) {
+            $("#"+checkpoint.id).attr('fill-opacity', 1);
+            direction += ' au ' + checkpoint.name;
+          }
+
+          if(direction.length > 0) {
+            directions.push(direction);
           }
 
           if(stepNum === solution.length-1) {
@@ -1379,62 +1413,87 @@
 
     function getAngle(solution, stepNum)
     {
-      var nextStep, ab, bc, ac, cos, angle, factor,
+      var ab, bc, ac, cos, angle,
         currSegment, nextSegment,
         ax, ay, bx, by, cx, cy;
-      nextStep = stepNum +1;
 
-      if(solution[nextStep] !== undefined) {
+      var factor = 1;
+      var nextStep = stepNum +1;
+
+      // if(solution[nextStep] !== undefined && solution[stepNum].type !== 'po' && solution[nextStep].type !== 'po') {
+      if(solution[nextStep] !== undefined && solution[stepNum].floor === solution[nextStep].floor) {
         currSegment = dataStore.p[solution[stepNum].floor][solution[stepNum].segment];
         nextSegment = dataStore.p[solution[nextStep].floor][solution[nextStep].segment];
 
         if(currSegment.x === nextSegment.x && currSegment.y === nextSegment.y) {
-          ax = currSegment.m;
-          ay = currSegment.n;
-          bx = currSegment.x;
-          by = currSegment.y;
-          cx = nextSegment.m;
-          cy = nextSegment.n;
+          ax = parseInt(currSegment.m);
+          ay = parseInt(currSegment.n);
+          bx = parseInt(currSegment.x);
+          by = parseInt(currSegment.y);
+          cx = parseInt(nextSegment.m);
+          cy = parseInt(nextSegment.n);
         } else if(currSegment.m === nextSegment.x && currSegment.n === nextSegment.y) {
-          ax = currSegment.x;
-          ay = currSegment.y;
-          bx = currSegment.m;
-          by = currSegment.n;
-          cx = nextSegment.m;
-          cy = nextSegment.n;
+          ax = parseInt(currSegment.x);
+          ay = parseInt(currSegment.y);
+          bx = parseInt(currSegment.m);
+          by = parseInt(currSegment.n);
+          cx = parseInt(nextSegment.m);
+          cy = parseInt(nextSegment.n);
         } else if(currSegment.x === nextSegment.m && currSegment.y === nextSegment.n) {
-          ax = currSegment.m;
-          ay = currSegment.n;
-          bx = currSegment.x;
-          by = currSegment.y;
-          cx = nextSegment.x;
-          cy = nextSegment.y;
+          ax = parseInt(currSegment.m);
+          ay = parseInt(currSegment.n);
+          bx = parseInt(currSegment.x);
+          by = parseInt(currSegment.y);
+          cx = parseInt(nextSegment.x);
+          cy = parseInt(nextSegment.y);
         } else if  (currSegment.m === nextSegment.m && currSegment.n === nextSegment.n) {
-          ax = currSegment.x;
-          ay = currSegment.y;
-          bx = currSegment.m;
-          by = currSegment.n;
-          cx = nextSegment.x;
-          cy = nextSegment.y;
+          ax = parseInt(currSegment.x);
+          ay = parseInt(currSegment.y);
+          bx = parseInt(currSegment.m);
+          by = parseInt(currSegment.n);
+          cx = parseInt(nextSegment.x);
+          cy = parseInt(nextSegment.y);
         }
 
-        if(( bx > cx && ay > by ) || ( ax > bx && by < cy) || ( bx < cx && ay < by ) || ( ax < bx && by > cy)) {
-          factor = -1;
-        } else if(( bx < cx && ay > by ) || ( ax < bx && by < cy ) || ( bx > cx && ay < by ) || ( ax > bx && by > cy )) {
-          factor = 1;
-        } else {
-          factor = 1;
+        if(ax !== undefined && ay !== undefined && bx !== undefined && by !== undefined && cx !== undefined && cy !== undefined) {
+          ab = Math.sqrt(Math.pow(bx-ax, 2) + Math.pow(by-ay, 2));
+          bc = Math.sqrt(Math.pow(bx-cx, 2) + Math.pow(by-cy, 2));
+          ac = Math.sqrt(Math.pow(cx-ax, 2) + Math.pow(cy-ay, 2));
+          cos = Math.acos((Math.pow(bc,2)+Math.pow(ab, 2)-Math.pow(ac, 2))/(2*bc*ab));
+          angle = (cos * 180) / Math.PI;
+
+          // check if left or right turn
+          if(( bx > cx && ay > by ) || ( ax > bx && by < cy) || ( bx < cx && ay < by ) || ( ax < bx && by > cy)) {
+            factor = -1; // left
+          } else if(( bx < cx && ay > by ) || ( ax < bx && by < cy ) || ( bx > cx && ay < by ) || ( ax > bx && by > cy )) {
+            factor = 1; // right
+          }
+
+          return angle * factor;
         }
-
-        ab = Math.sqrt(Math.pow(bx-ax, 2) + Math.pow(by-ay, 2));
-        bc = Math.sqrt(Math.pow(bx-cx, 2) + Math.pow(by-cy, 2));
-        ac = Math.sqrt(Math.pow(cx-ax, 2) + Math.pow(cy-ay, 2));
-        cos = Math.acos((bc*bc+ab*ab-ac*ac)/(2*bc*ab));
-        angle = (cos * 180) / Math.PI;
-
-        return angle * factor;
       }
       return 0;
+    }
+
+    function getCheckpoint(currentFloor, stepNum)
+    {
+      var nextStep = stepNum +1;
+
+      if(solution[nextStep] !==  undefined) {
+        var currentSegment = dataStore.p[solution[stepNum].floor][solution[stepNum].segment];
+        var mnCurrent = currentSegment.m + '-' + currentSegment.n;
+        var xyCurrent = currentSegment.x + '-' + currentSegment.y;
+        var nextSegment = dataStore.p[solution[nextStep].floor][solution[nextStep].segment];
+        var mnNext = nextSegment.m + '-' + nextSegment.n;
+        var xyNext = nextSegment.x + '-' + nextSegment.y;
+
+        if(dataStore.c[currentFloor][mnCurrent] !== undefined && ( mnCurrent === mnNext || mnCurrent === xyNext )) {
+          return dataStore.c[currentFloor][mnCurrent];
+        } else if(dataStore.c[currentFloor][xyCurrent] !== undefined && ( xyCurrent === xyNext || xyCurrent === mnNext )) {
+          return dataStore.c[currentFloor][xyCurrent];
+        }
+      }
+      return false;
     }
 
     /**
@@ -1468,6 +1527,8 @@
       //clear all rooms
       $('#Rooms *.wayfindingRoom', obj).removeAttr('class');
 
+      // hide all checkpoints on map
+      $('[data-checkpoint]').attr('fill-opacity', 0);
       solution = [];
 
       if (startpoint !== destination) {
