@@ -60,6 +60,8 @@
 <g id="Points">
 	<circle data-destination="" id="R201_1_" cx="297" cy="408" r="2"/>
 	<circle data-destination="" id="R202_1_" cx="504" cy="111" r="2"/>
+
+    <circle id="cp-37373" data-checkpoint="" data-name="checkpoint2" cx="495" cy="147" r="5"/>
 </g>
 <g id="Paths">
 	<line fill="none" stroke="#00FFFF" x1="297" y1="408" x2="297" y2="381"/>

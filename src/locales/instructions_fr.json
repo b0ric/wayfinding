@@ -6,4 +6,5 @@
   "straight_by_checkpoint": "Marchez #{distance} mètres et continuez passé le #{checkpoint_name}",
   "arrive_at_dest": "Vous êtes arrivé à votre destination",
   "change_floor": "Rendez-vous à l'étage #{destination_floor}"
+  "at": "au"
 }

@@ -379,7 +379,7 @@
     {
       var path, pointId, cx, cy,
         matches, portal, portalId, ar,
-        checkpoint, checkpointName;
+        checkpoint;
 
       dataStore.p[mapNum] = [];
 
@@ -463,8 +463,8 @@
         cy = $(this).attr('cy');
         checkpoint = {
           id: $(this).attr('id'),
-          cx: cx,
-          cy: cy,
+          cx: parseInt(cx),
+          cy: parseInt(cy),
           name: $(this).data('name')
         };
 
@@ -1354,9 +1354,15 @@
       setRouteMessage(directions);
     } // end function animatePath
 
+    /**
+     * Get an array of textual directions for the route
+     *
+     * @param solution: Quickest path to destination
+     * @param currentFloor
+     * @returns {Array}
+     */
     function getWording(solution, currentFloor)
     {
-
       var stepLength;
       var distance = 0;
       var angle;
@@ -1406,7 +1412,7 @@
 
           if(checkpoint) {
             $("#"+checkpoint.id).attr('fill-opacity', 1);
-            direction += ' au ' + checkpoint.name;
+            direction += ' ' + instructions['at'] + ' ' + checkpoint.name;
           }
 
           if(direction.length > 0) {
@@ -1415,7 +1421,7 @@
 
           if(stepNum === solution.length-1) {
             direction = instructions['arrive_at_dest'];
-            iconClass = 'destination'
+            iconClass = 'destination';
             directions.push({ "direction": direction, "iconClass": iconClass });
           }
         } else if(directions.length > 0) {
@@ -1428,6 +1434,13 @@
       return directions;
     }
 
+    /**
+     * Calculate the angle of a turn in the directions
+     *
+     * @param solution: Quickest route to destination
+     * @param stepNum: Current step
+     * @returns {number}: Angle (negative if left turn, positive if right)
+     */
     function getAngle(solution, stepNum)
     {
       var ab, bc, ac, cos, angle,
@@ -1492,6 +1505,13 @@
       return 0;
     }
 
+    /**
+     * Checks if path crosses a checkpoint
+     *
+     * @param currentFloor
+     * @param stepNum: Current step
+     * @returns {*}
+     */
     function getCheckpoint(currentFloor, stepNum)
     {
       var nextStep = stepNum +1;
@@ -1800,8 +1820,9 @@
     } //end function RouteTo
 
     /**
+     * Create a list of textual indications for the route
      *
-     *
+     * @param directions: Array containing directions returned by getWording()
      */
     function setRouteMessage(directions)
     {
@@ -1815,6 +1836,11 @@
       }
     }
 
+    /**
+     * Load the current languages texts
+     *
+     * @param lang
+     */
     function getInstructions(lang)
     {
       $.getJSON('/src/locales/instructions_'+lang+'.json', function(data) {
