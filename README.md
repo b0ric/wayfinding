@@ -20,8 +20,8 @@ Wrapper for the background image of the map
 
 Their id needs to be created using a specific format (ex: Elev.1.floor3). 
 
-* The first part (Elev) is used to determine the type of portal.
-* The second part (1) is used to link portals together
+* The first part (Elev) is ~~used to determine the type of portal~~ not used anymore. To determine the type, use `data-portal-type` attribute.
+* The second part (1) is used to link portals together (must be unique for each portal group)
 * The third part (floor3) is used to set the map where the portal leads.
 
 You can remove a portal from the accessible routes by setting the attribute `data-accessible-route` to false. 
@@ -29,7 +29,7 @@ You can remove a portal from the accessible routes by setting the attribute `dat
 ```
 <g id="Portals">
 	<circle id="Elev.1.floor2" cx="297" cy="237" r="2" />
-	<circle id="Stair.1.floor2" cx="297" cy="273" r="2" data-accessible-route="false"/>
+	<circle id="Stair.2.floor2" cx="297" cy="273" r="2" data-accessible-route="false"/>
 </g>
 ```
 
@@ -77,12 +77,25 @@ Use the `data-destination` attribute to set a point as a destination. If the att
 |floorChangeAnimationDelay|1250|Milliseconds to wait during animation when a floor change occurs (if `autoChangeFloor` is set to true)|
 |changeFloorTrigger|`#change-floor`|If `autoChangeFloor` is set to false, which element triggers the change manually|
 
+### Directions output options
+
+|Setting|Default|Description|
+|---|---|---|
+|directionsOutput|`true`|Should textual direction output be enabled|
+|directionsContainer|`#directions`|Selector for element where directions will be output|
+|directionClass|''|Class for the `<ul>` containing the directions|
+|directionOlType|`a`|Type of list element for the `<ol>`. See [https://www.w3schools.com/tags/att_ol_type.asp]() for possible values.|
+|directionsLanguage|`en`|Language used for the textual directions. Correct file must be created in the `src/locales/` directory.|
+|mapRatio|7|Ratio for the map, used to calculate distances for textual directions|
+
+
 ### SVG attributes
 
 |Attribute|Element|Effect|
 |---|---|---|
 |`data-destination`|Point|Used to differentiate destination points from normal points|
 |`data-accessible-route`|Portal, Path|If set to false, the element will be ignored when looking for an accessible route.|
+|`data-portal-type`|Portal|Type of portal. Possible values `stairs`, `elevator`, `escalator`, `door` and `portal`. If no value is set, `portal` will be used.|
 
 # Credits
 

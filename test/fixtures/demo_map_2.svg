@@ -52,10 +52,10 @@
 	</a>
 </g>
 <g id="Portals">
-	<circle id="Elev.1.floor1" cx="297" cy="237" r="2"/>
-	<circle id="Stair.1.floor1" cx="288" cy="273" r="2" data-accessible-route="false"/>
-	<circle id="Elev.1.floor3" cx="297" cy="237" r="2"/>
-	<circle id="Stair.1.floor3" cx="288" cy="273" r="2" data-accessible-route="false"/>
+	<circle id="Elev.1.floor1" cx="297" cy="237" r="2" data-portal-type="elevator"/>
+	<circle id="Elev.1.floor3" cx="297" cy="237" r="2" data-portal-type="elevator"/>
+	<circle id="Stair.2.floor1" cx="288" cy="273" r="2" data-accessible-route="false" data-portal-type="stairs"/>
+	<circle id="Stair.2.floor3" cx="288" cy="273" r="2" data-accessible-route="false" data-portal-type="stairs"/>
 </g>
 <g id="Points">
 	<circle data-destination="" id="R201_1_" cx="297" cy="408" r="2"/>

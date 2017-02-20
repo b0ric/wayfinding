@@ -433,7 +433,7 @@
         ar = ($(this).data('accessible-route') !== false) ? true : false;
         portal = {
           id: portalId,
-          type: portalId.split('.')[0],
+          type: ($(this).data('portal-type') !== undefined) ? $(this).data('portal-type') : 'portal',
           floor: map.id,
           ar: ar,
           mate: portalId.split('.').slice(0, 2).join('.') + '.' + map.id,
@@ -1344,7 +1344,6 @@
         if(solution[0].floor !== solution[solution.length -1].floor) {
           var $trigger = $(options.changeFloorTrigger);
           $trigger.show();
-          setRouteMessage(['Please use the button to continue...'])
           $trigger.on('click', function() {
             floorChange();
             $(this).hide();
@@ -1431,7 +1430,7 @@
           }
         } else if(directions.length > 0) {
           direction = instructions['change_floor'].replace('#{destination_floor}', dataStore.p[solution[stepNum].floor][solution[stepNum].segment].floor);
-          iconClass = '-elevator'; // todo: add stairs
+          iconClass = '-' + dataStore.q[solution[stepNum].segment].t;
           directions.push({ "direction": direction, "iconClass": iconClass });
           break;
         }
@@ -1455,7 +1454,6 @@
       var factor = 1;
       var nextStep = stepNum +1;
 
-      // if(solution[nextStep] !== undefined && solution[stepNum].type !== 'po' && solution[nextStep].type !== 'po') {
       if(solution[nextStep] !== undefined && solution[stepNum].floor === solution[nextStep].floor) {
         currSegment = dataStore.p[solution[stepNum].floor][solution[stepNum].segment];
         nextSegment = dataStore.p[solution[nextStep].floor][solution[nextStep].segment];
