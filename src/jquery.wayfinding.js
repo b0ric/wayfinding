@@ -110,7 +110,7 @@
     'directionsContainer': '#directions', // selector of the directions container
     'directionsClass': '', // class for the <ol> containing the directions
     'directionsOlType': 'a', // Type of list element for the <ol>
-    'directionsLanguage': 'en', // Language used for the textual directions.
+    'directionsLanguage': 'fr', // Language used for the textual directions.
     'mapRatio': 7, // ratio used to calculate distances
   },
   instructions,
@@ -791,7 +791,9 @@
 
       buildPortals();
       generateRoutes();
-      getInstructions(options.directionsLanguage);
+      if(options.directionsOutput) {
+        getInstructions(options.directionsLanguage);
+      }
 
       return dataStore;
     } // function build
@@ -1205,6 +1207,11 @@
 
       function adjustIn(current, old, target, count, speed)
       {
+        console.log(current);
+        console.log(old);
+        console.log(target);
+        console.log(count);
+        console.log(speed);
         setTimeout(function () {
           var zoomIn = {};
           zoomIn.X = interpolateValue(old.X, target.X, current, count);
@@ -1846,9 +1853,29 @@
      */
     function getInstructions(lang)
     {
-      $.getJSON('/src/locales/directions_'+lang+'.json', function(data) {
-        instructions = data;
-      });
+      var translations = {
+        'en': {
+          "slight_left": "Walk #{distance} meters and take a slight left",
+          "left": "Walk #{distance} meters and turn left",
+          "slight_right": "Walk #{distance} meters and take a slight right",
+          "right": "Walk #{distance} meters and turn right",
+          "straight_by_checkpoint": "Walk #{distance} meters and continue past the #{checkpoint_name}",
+          "arrive_at_dest": "You have arrived at your destination",
+          "change_floor": "Go the floor #{destination_floor}",
+          "at": "at"
+        },
+        'fr': {
+          "slight_left": "Marchez #{distance} mètres puis tournez légèrement à gauche",
+          "left": "Marchez #{distance} mètres puis tournez à gauche",
+          "slight_right": "Marchez #{distance} mètres puis tournez légèrement à droite",
+          "right": "Marchez #{distance} mètres puis tournez à droite",
+          "straight_by_checkpoint": "Marchez #{distance} mètres et continuez passé le #{checkpoint_name}",
+          "arrive_at_dest": "Vous êtes arrivé à votre destination",
+          "change_floor": "Rendez-vous à l'étage #{destination_floor}",
+          "at": "au"
+        }
+      };
+      instructions = translations[lang];
     }
     /**
      *

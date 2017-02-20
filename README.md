@@ -55,6 +55,16 @@ Use the `data-destination` attribute to set a point as a destination. If the att
 </g>
 ```
 
+### Checkpoints
+
+Use the `data-checkpoint` attribute to set a checkpoint in a path. Those checkpoints will provide more informations on your route. They will be shown if the route has a common intersection with the checkpoint.
+
+```
+<g id="Points">
+    <circle id="cp-123" data-checkpoint="" data-name="Checkpoint1" cx="342" cy="381" r="5"/>
+</g>
+```
+
 ## Plugin options
 ### Wayfinding Params
 
@@ -85,7 +95,7 @@ Use the `data-destination` attribute to set a point as a destination. If the att
 |directionsContainer|`#directions`|Selector for element where directions will be output|
 |directionClass|''|Class for the `<ul>` containing the directions|
 |directionOlType|`a`|Type of list element for the `<ol>`. See [https://www.w3schools.com/tags/att_ol_type.asp]() for possible values.|
-|directionsLanguage|`en`|Language used for the textual directions. Correct file must be created in the `src/locales/` directory.|
+|directionsLanguage|`en`|Language used for the textual directions.|
 |mapRatio|7|Ratio for the map, used to calculate distances for textual directions|
 
 
@@ -96,6 +106,8 @@ Use the `data-destination` attribute to set a point as a destination. If the att
 |`data-destination`|Point|Used to differentiate destination points from normal points|
 |`data-accessible-route`|Portal, Path|If set to false, the element will be ignored when looking for an accessible route.|
 |`data-portal-type`|Portal|Type of portal. Possible values `stairs`, `elevator`, `escalator`, `door` and `portal`. If no value is set, `portal` will be used.|
+|`data-checkpoint`|Point/Checkpoint|Transform the point into a checkpoint|
+|`data-name`|Checkpoint|Will be shown in the textual directions of the route.|
 
 # Credits
 
