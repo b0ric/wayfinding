@@ -106,9 +106,11 @@
     'changeFloorTrigger': '#change-floor', // selector of the trigger element
     'floorChangeAnimationDelay': 1250, // milliseconds to wait during animation when a floor change occurs
     // directions output
+    'directionsOutput': true,
     'directionsContainer': '#directions', // selector of the directions container
-    'directionsClass': '', // class for the ul containing the directions
-    'directionsLanguage': 'en',
+    'directionsClass': '', // class for the <ol> containing the directions
+    'directionsOlType': 'a', // Type of list element for the <ol>
+    'directionsLanguage': 'en', // Language used for the textual directions.
     'mapRatio': 7, // ratio used to calculate distances
   },
   instructions,
@@ -1350,8 +1352,10 @@
         }
       }
 
-      directions = getWording(solution, mapIdx);
-      setRouteMessage(directions);
+      if(options.directionsOutput) {
+        directions = getWording(solution, mapIdx);
+        setRouteMessage(directions);
+      }
     } // end function animatePath
 
     /**
@@ -1381,28 +1385,29 @@
           switch(true) {
             case (angle < -30 && angle > -120):
               direction = instructions['left'].replace('#{distance}', distance);
-              iconClass = 'arrow-left';
+              iconClass = '-left';
               distance = 0;
               break;
             case (angle <= -120 && angle > -150):
               direction = instructions['slight_left'].replace('#{distance}', distance);
-              iconClass = 'arrow-top-left';
+              iconClass = '-up-left';
               distance = 0;
               break;
             case (angle < 150 && angle >= 120):
               direction = instructions['slight_right'].replace('#{distance}', distance);
-              iconClass = 'arrow-top-right';
+              iconClass = '-up-right';
               distance = 0;
               break;
             case (angle < 120 && angle > 30):
               direction = instructions['right'].replace('#{distance}', distance);
-              iconClass = 'arrow-right';
+              iconClass = '-right';
               distance = 0;
               break;
             case ((angle <= -150 && angle >= -180) || (angle >= 150 && angle <= 180) && checkpoint !== false):
               direction = instructions['straight_by_checkpoint'].replace('#{distance}', distance).replace('#{checkpoint_name}', checkpoint.name);
-              iconClass = 'arrow-up';
+              iconClass = '-up';
               distance = 0;
+              $("#"+checkpoint.id).attr('fill-opacity', 1);
               checkpoint = false;
               break;
             default:
@@ -1421,12 +1426,12 @@
 
           if(stepNum === solution.length-1) {
             direction = instructions['arrive_at_dest'];
-            iconClass = 'destination';
+            iconClass = '-destination';
             directions.push({ "direction": direction, "iconClass": iconClass });
           }
         } else if(directions.length > 0) {
           direction = instructions['change_floor'].replace('#{destination_floor}', dataStore.p[solution[stepNum].floor][solution[stepNum].segment].floor);
-          iconClass = 'elevator';
+          iconClass = '-elevator'; // todo: add stairs
           directions.push({ "direction": direction, "iconClass": iconClass });
           break;
         }
@@ -1827,7 +1832,7 @@
     function setRouteMessage(directions)
     {
       if(directions.length > 0) {
-        var html = '<ol type="a" class="'+options.directionsClass+'">';
+        var html = '<ol type="'+options.directionsOlType+'" class="'+options.directionsClass+'">';
         for(var i = 0; i < directions.length; i++) {
           html += '<li class="'+directions[i].iconClass+'">' + directions[i].direction + '</li>';
         }
@@ -1843,7 +1848,7 @@
      */
     function getInstructions(lang)
     {
-      $.getJSON('/src/locales/instructions_'+lang+'.json', function(data) {
+      $.getJSON('/src/locales/directions_'+lang+'.json', function(data) {
         instructions = data;
       });
     }
