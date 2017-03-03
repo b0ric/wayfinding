@@ -103,6 +103,7 @@
     'panzoom': {
       'minScale': 1,
       'maxScale': 30,
+      'viewboxScale': 1,
       'contain': 'invert',
       'cursor': 'pointer',
       '$zoomIn': $(),
@@ -1189,7 +1190,7 @@
       var cssH = $(cssDiv).height();
 
       // Step 1, determine the scale
-      var scale = Math.min(( viewW / w ), ( viewH / h ));
+      var scale = Math.min(( viewW / w ), ( viewH / h )) * options.panzoom.viewboxScale;
 
       if (scale > 15) scale = 15;
 
