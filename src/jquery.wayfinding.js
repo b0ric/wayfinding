@@ -101,14 +101,14 @@
     },
     'pinchToZoom': false, // requires jquery.panzoom
     'panzoom': {
-      'minScale': 1,
-      'maxScale': 30,
-      'viewboxScale': 1,
-      'contain': 'invert',
-      'cursor': 'pointer',
-      '$zoomIn': $(),
-      '$zoomOut': $(),
-      '$reset': $()
+      'minScale': 1, // min zoom scale
+      'maxScale': 30, // max zoom scale
+      'viewboxScale': 1, // scale the viewbox when zooming
+      'contain': 'invert', // Indicate that the element should be contained within its parent when panning (https://github.com/timmywil/jquery.panzoom for more infos)
+      'cursor': 'pointer', // Default cursor style for the element
+      '$zoomIn': $(), // zoom in button jQuery object
+      '$zoomOut': $(), // zoom out button jQuery object
+      '$reset': $() // zoom reset button jQuery object
     },
     'zoomToRoute': false,
     'zoomPadding': 25,
