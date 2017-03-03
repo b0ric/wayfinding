@@ -1189,7 +1189,7 @@
       var cssH = $(cssDiv).height();
 
       // Step 1, determine the scale
-      var scale = Math.min(( viewW / w ), ( viewH / h )) * 0.9;
+      var scale = Math.min(( viewW / w ), ( viewH / h ));
 
       if (scale > 15) scale = 15;
 
@@ -1818,9 +1818,9 @@
             newPath.style.fill = 'none';
 
             if (newPath.classList) {
-              newPath.classList.add('directionPath' + j);
+              newPath.classList.add('directionPath' + j, 'directionPathSVG');
             } else {
-              newPath.setAttribute('class', 'directionPath' + j);
+              newPath.setAttribute('class', 'directionPathSVG directionPath' + j );
             }
 
             // Attach the newpath to the startpin or endpin if they exist on this floor
