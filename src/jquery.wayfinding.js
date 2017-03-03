@@ -101,9 +101,13 @@
     },
     'pinchToZoom': false, // requires jquery.panzoom
     'panzoom': {
-      'minScale': 0.1,
+      'minScale': 1,
       'maxScale': 30,
-      'contain': false
+      'contain': 'invert',
+      'cursor': 'pointer',
+      '$zoomIn': $(),
+      '$zoomOut': $(),
+      '$reset': $()
     },
     'zoomToRoute': false,
     'zoomPadding': 25,
@@ -1023,7 +1027,10 @@
         minScale: options.panzoom.minScale,
         maxScale: options.panzoom.maxScale,
         contain: options.panzoom.contain,
-        cursor: 'pointer'
+        cursor: options.panzoom.cursor,
+        $zoomIn: options.panzoom.$zoomIn,
+        $zoomOut: options.panzoom.$zoomOut,
+        $reset: options.panzoom.$reset
       });
 
       el.on('mousewheel.focal', function(e) {
