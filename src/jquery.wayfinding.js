@@ -100,6 +100,11 @@
       height: 40
     },
     'pinchToZoom': false, // requires jquery.panzoom
+    'panzoom': {
+      'minScale': 0.1,
+      'maxScale': 30,
+      'contain': false
+    },
     'zoomToRoute': false,
     'zoomPadding': 25,
     'autoChangeFloor': false, // change floor automatically or require a user's action
@@ -1015,8 +1020,9 @@
     function initializePanZoom(el)
     {
       el.panzoom({
-        minScale: 1.0,
-        contain: 'invert',
+        minScale: options.panzoom.minScale,
+        maxScale: options.panzoom.maxScale,
+        contain: options.panzoom.contain,
         cursor: 'pointer'
       });
 
@@ -1154,8 +1160,8 @@
 
       x = parseFloat(x);
       y = parseFloat(y);
-      w = parseFloat(w);
-      h = parseFloat(h);
+      w = parseFloat(w) || 1;
+      h = parseFloat(h) || 1;
 
       var viewBox = svg.getAttribute('viewBox');
       var viewX = parseFloat(viewBox.split(/\s+|,/)[0]); // viewBox is [x, y, w, h], x == [0]
@@ -1166,18 +1172,20 @@
       var cssW = $(cssDiv).width();
       var cssH = $(cssDiv).height();
 
+      var height = $(cssDiv).parent('div').first().height() * viewH /cssH;
+
       // Step 1, determine the scale
-      var scale = Math.min(( viewW / w ), ( viewH / h ));
+      var scale = Math.min(( viewW / w ),  (height / h) );
 
       $(cssDiv).panzoom('zoom', parseFloat(scale));
 
       // Determine bounding box -> CSS coordinate conversion factor
       var bcX = cssW / viewW;
-      var bcY = cssH / viewH;
+      var bcY = cssH / height;
 
       // Step 2, determine the focal
       var bcx = viewX + (viewW / 2); // box center
-      var bcy = viewY + (viewH / 2);
+      var bcy = viewY + (height / 2);
 
       var fx = (bcx - (x + (w / 2))) * bcX;
       var fy = (bcy - (y + (h / 2))) * bcY;
@@ -1193,7 +1201,7 @@
     function animatePath(drawingSegment)
     {
       var path,
-        svg,
+        svg, svgDiv,
         pathRect,
         drawLength,
         oldViewBox,
@@ -1207,11 +1215,6 @@
 
       function adjustIn(current, old, target, count, speed)
       {
-        console.log(current);
-        console.log(old);
-        console.log(target);
-        console.log(count);
-        console.log(speed);
         setTimeout(function () {
           var zoomIn = {};
           zoomIn.X = interpolateValue(old.X, target.X, current, count);
@@ -1226,7 +1229,7 @@
             // Use SVG viewBox-based zooming
             svg.setAttribute('viewBox', zoomIn.X + ' ' + zoomIn.Y + ' ' + zoomIn.W + ' ' + zoomIn.H);
           }
-        }, current * (speed / count));
+        }, current * (speed / count) * 10);
       }
 
       function adjustOut(current, old, target, count, speed)
@@ -1290,6 +1293,7 @@
 
       var mapIdx = drawing[drawingSegment][0].floor;
       svg = $('#' + maps[mapIdx].id + ' svg')[0];
+      svgDiv = $($(svg).parent()[0]);
       drawLength = drawing[drawingSegment].routeLength;
       animationDuration = drawLength * options.path.speed;
 
@@ -1319,23 +1323,27 @@
           });
         }
       } else {
-        // Zooming logic...
-        // Store the original SVG viewBox in order to zoom out back to it after path animation
-        oldViewBox = svg.getAttribute('viewBox');
-        oldView.X = parseFloat(oldViewBox.split(/\s+|,/)[0]); // viewBox is [x, y, w, h], x == [0]
-        oldView.Y = parseFloat(oldViewBox.split(/\s+|,/)[1]);
-        oldView.W = parseFloat(oldViewBox.split(/\s+|,/)[2]);
-        oldView.H = parseFloat(oldViewBox.split(/\s+|,/)[3]);
+        if (options.pinchToZoom) {
+          panzoomWithViewBoxCoords(svgDiv, svg, pathRect.x, pathRect.y, pathRect.width, pathRect.height);
+        } else {
+          // Zooming logic...
+          // Store the original SVG viewBox in order to zoom out back to it after path animation
+          oldViewBox = svg.getAttribute('viewBox');
+          oldView.X = parseFloat(oldViewBox.split(/\s+|,/)[0]); // viewBox is [x, y, w, h], x == [0]
+          oldView.Y = parseFloat(oldViewBox.split(/\s+|,/)[1]);
+          oldView.W = parseFloat(oldViewBox.split(/\s+|,/)[2]);
+          oldView.H = parseFloat(oldViewBox.split(/\s+|,/)[3]);
 
-        // Calculate single step size from each direction
-        newView.X = ((pathRect.x - pad) > 0) ? (pathRect.x - pad) : 0;
-        newView.Y = ((pathRect.y - pad) > 0) ? (pathRect.y - pad) : 0;
-        newView.H = pathRect.height + (2 * pad);
-        newView.W = pathRect.width + (2 * pad);
+          // Calculate single step size from each direction
+          newView.X = ((pathRect.x - pad) > 0) ? (pathRect.x - pad) : 0;
+          newView.Y = ((pathRect.y - pad) > 0) ? (pathRect.y - pad) : 0;
+          newView.H = pathRect.height + (2 * pad);
+          newView.W = pathRect.width + (2 * pad);
 
-        // Loop the specified number of steps to create the zoom in animation
-        for (step = 0; step <= steps; step++) {
-          adjustIn(step, oldView, newView, steps, duration);
+          // Loop the specified number of steps to create the zoom in animation
+          for (step = 0; step <= steps; step++) {
+            adjustIn(step, oldView, newView, steps, duration);
+          }
         }
       }
 
