@@ -82,6 +82,7 @@ Use the `data-checkpoint` attribute to set a checkpoint in a path. Those checkpo
 |locationIndicator|`{fill: 'red', height: 40 }`|Params for the location indicator pointer styles|
 |pinchToZoom|`false`|Should pinch to zoom be activated (requires jquery.panzoom)|
 |zoomToRoute|`false`|Should zoom to route be activated (requires jquery.panzoom)|
+|panzoom|`{minScale: 1, maxScale: 30, viewboxScale: 1, contain: 'invert', cursor: 'pointer', $zoomIn: $(), $zoomOut: $(), $reset: $()}`|Params used for panzoom|
 |zoomPadding|25|Padding when zoomed in|
 |autoChangeFloor|`true`|Should floor change be automatic|
 |floorChangeAnimationDelay|1250|Milliseconds to wait during animation when a floor change occurs (if `autoChangeFloor` is set to true)|
