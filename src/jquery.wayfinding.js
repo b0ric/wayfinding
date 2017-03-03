@@ -1026,6 +1026,13 @@
         cursor: 'pointer'
       });
 
+      el.on('mousewheel.focal', function(e) {
+        e.preventDefault();
+        var delta = e.delta || e.originalEvent.wheelDelta;
+        var zoomOut = (delta ? delta < 0 : e.originalEvent.deltaY > 0);
+        el.panzoom('zoom', zoomOut, {increment: 0.05, animate: false, focal: e});
+      });
+
       // Allow clicking on links within the SVG despite $.panZoom()
       el.find('a').on('mousedown touchstart', function (e) {
         e.stopImmediatePropagation();
@@ -1157,38 +1164,39 @@
      */
     function panzoomWithViewBoxCoords(cssDiv, svg, x, y, w, h)
     {
+      $(cssDiv).panzoom('resetZoom', false);
+      $(cssDiv).panzoom('resetPan', false);
 
       x = parseFloat(x);
       y = parseFloat(y);
-      w = parseFloat(w) || 1;
-      h = parseFloat(h) || 1;
+      w = parseFloat(w) ? parseFloat(w) : 1;
+      h = parseFloat(h) ? parseFloat(h) : 1;
 
-      var viewBox = svg.getAttribute('viewBox');
-      var viewX = parseFloat(viewBox.split(/\s+|,/)[0]); // viewBox is [x, y, w, h], x == [0]
-      var viewY = parseFloat(viewBox.split(/\s+|,/)[1]);
-      var viewW = parseFloat(viewBox.split(/\s+|,/)[2]);
-      var viewH = parseFloat(viewBox.split(/\s+|,/)[3]);
+      var viewBox = svg.getAttribute('viewBox').split(/\s+|,/);
+      var viewX = parseFloat(viewBox[0]); // viewBox is [x, y, w, h], x == [0]
+      var viewY = parseFloat(viewBox[1]);
+      var viewW = parseFloat(viewBox[2]);
+      var viewH = parseFloat(viewBox[3]);
 
       var cssW = $(cssDiv).width();
       var cssH = $(cssDiv).height();
 
-      var height = $(cssDiv).parent('div').first().height() * viewH /cssH;
-
       // Step 1, determine the scale
-      var scale = Math.min(( viewW / w ),  (height / h) );
+      var scale = Math.min(( viewW / w ), ( viewH / h ));
+
+      if (scale > 15) scale = 15;
 
       $(cssDiv).panzoom('zoom', parseFloat(scale));
 
       // Determine bounding box -> CSS coordinate conversion factor
-      var bcX = cssW / viewW;
-      var bcY = cssH / height;
+      var bc = cssW > cssH ? cssH / viewH : cssW / viewW;
 
       // Step 2, determine the focal
       var bcx = viewX + (viewW / 2); // box center
-      var bcy = viewY + (height / 2);
+      var bcy = viewY + (viewH / 2);
 
-      var fx = (bcx - (x + (w / 2))) * bcX;
-      var fy = (bcy - (y + (h / 2))) * bcY;
+      var fx = (bcx - (x + (w / 2))) * bc;
+      var fy = (bcy - (y + (h / 2))) * bc;
 
       // Step 3, apply $.panzoom()
       $(cssDiv).panzoom('pan', fx * scale, fy * scale);
