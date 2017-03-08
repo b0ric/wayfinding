@@ -1627,6 +1627,7 @@
 
           if (solution.length === 0) {
             console.warn('Attempting to route with no solution. This should never happen. SVG likely has errors. Destination is: ' + destination);
+            $(el).trigger('wayfinding:noPossibleRoute', {startpoint: startpoint, endpoint: destination})
             return;
           }
 
