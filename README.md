@@ -86,7 +86,8 @@ Use the `data-checkpoint` attribute to set a checkpoint in a path. Those checkpo
 |zoomPadding|25|Padding when zoomed in|
 |autoChangeFloor|`true`|Should floor change be automatic|
 |floorChangeAnimationDelay|1250|Milliseconds to wait during animation when a floor change occurs (if `autoChangeFloor` is set to true)|
-|changeFloorTrigger|`#change-floor`|If `autoChangeFloor` is set to false, which element triggers the change manually|
+|prevStepTrigger|`#prev-step`|If `autoChangeFloor` is set to false, element that triggers return to previous step|
+|nextStepTrigger|`#next-step`|If `autoChangeFloor` is set to false, element that triggers change to next step|
 
 ### Directions output options
 
