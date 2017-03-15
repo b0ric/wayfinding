@@ -56,6 +56,7 @@
 	<circle id="Elev.1.floor1" cx="297" cy="237" r="2" data-portal-type="elevator"/>
 	<circle id="Stair.2.floor2" cx="288" cy="273" r="2" data-accessible-route="false" data-portal-type="stairs"/>
 	<circle id="Stair.2.floor2" cx="288" cy="273" r="2" data-accessible-route="false" data-portal-type="stairs"/>
+	<circle id="Stair.3.floor2" cx="504" cy="111" r="2" data-accessible-route="false" data-portal-type="stairs"/>
 </g>
 <g id="Points">
 	<circle data-destination="" id="R301_1_" cx="297" cy="408" r="2"/>

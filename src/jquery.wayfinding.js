@@ -113,7 +113,8 @@
     'zoomToRoute': false,
     'zoomPadding': 25,
     'autoChangeFloor': false, // change floor automatically or require a user's action
-    'changeFloorTrigger': '#change-floor', // selector of the trigger element
+    'prevStepTrigger': '#prev-step', // selector of the previous step trigger element
+    'nextStepTrigger': '#next-step', // selector of the next step trigger element
     'floorChangeAnimationDelay': 1250, // milliseconds to wait during animation when a floor change occurs
     // directions output
     'directionsOutput': true,
@@ -1295,6 +1296,32 @@
         }
       }
 
+      function toggleStepsButtons()
+      {
+        var $prevStep = $(options.prevStepTrigger);
+        var $nextStep = $(options.nextStepTrigger);
+
+        if(drawing.length > 0) {
+          if(drawing[drawingSegment+1] !== undefined) {
+            $nextStep.prop('disabled', false);
+            $nextStep.on('click', function() {
+              floorChange();
+            });
+          } else {
+            $nextStep.prop('disabled', true);
+          }
+
+          if(drawing[drawingSegment-1] !== undefined) {
+            $prevStep.prop('disabled', false);
+            $prevStep.on('click', function() {
+              animatePath(drawingSegment-1);
+            });
+          } else {
+            $prevStep.prop('disabled', true);
+          }
+        }
+      }
+
       if (options.repeat && drawingSegment >= drawing.length) {
         // if repeat is set, then delay and rerun display from first.
         // Don't implement, until we have click to cancel out of this
@@ -1373,12 +1400,7 @@
         }, animationDuration + options.floorChangeAnimationDelay);
       } else {
         if(solution[0].floor !== solution[solution.length -1].floor) {
-          var $trigger = $(options.changeFloorTrigger);
-          $trigger.show();
-          $trigger.on('click', function() {
-            floorChange();
-            $(this).hide();
-          });
+          toggleStepsButtons()
         }
       }
 
@@ -1803,6 +1825,7 @@
           $.each(drawing, function (j, map) {
             var path = '',
               newPath;
+
             $.each(map, function (k, stroke) {
               switch (stroke.type) {
                 case 'M':
@@ -1845,7 +1868,6 @@
             thisPath = $('#' + maps[map[0].floor].id + ' svg .directionPath' + j);
 
             drawing[j].path = thisPath;
-
           });
 
           animatePath(0);

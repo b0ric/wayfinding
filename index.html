@@ -64,7 +64,8 @@
                 </div>
                 <div class="right-controls">
                     <p id="directions"></p>
-                    <button id="change-floor" style="display: none;">Next floor</button>
+                    <button id="prev-step" disabled="disabled">Previous step</button>
+                    <button id="next-step" disabled="disabled">Next step</button>
                 </div>
             </div>
 		</div>
@@ -151,7 +152,6 @@
                     $('#Points circle').attr('fill-opacity', pointsOpacity);
                     return false;
                 });
-
 			});
 		</script>
 	</body>

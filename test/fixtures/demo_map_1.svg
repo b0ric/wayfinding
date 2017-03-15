@@ -123,9 +123,7 @@
 </g>
 <g id="Portals">
 	<circle id="Elev.1.floor2" cx="297" cy="237" r="2" data-portal-type="elevator"/>
-	<circle id="Elev.1.floor3" cx="297" cy="237" r="2" data-portal-type="elevator"/>
 	<circle id="Stair.2.floor2" cx="297" cy="273" r="2" data-accessible-route="false" />
-	<circle id="Stair.2.floor3" cx="297" cy="273" r="2" data-accessible-route="false" data-portal-type="stairs"/>
 </g>
 <g id="Points">
 	<circle data-destination="" id="lobby" cx="297" cy="408" r="2"/>
