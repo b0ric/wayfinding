@@ -1629,6 +1629,8 @@
             console.warn('Attempting to route with no solution. This should never happen. SVG likely has errors. Destination is: ' + destination);
             $(el).trigger('wayfinding:noPossibleRoute', {startpoint: startpoint, endpoint: destination})
             return;
+          } else {
+            $(el).trigger('wayfinding:possibleRoute', {startpoint: startpoint, endpoint: destination})
           }
 
           //if statement incorrectly assumes one point at the end of the path, works in that case, need to generalize
