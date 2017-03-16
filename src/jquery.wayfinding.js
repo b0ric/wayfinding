@@ -364,7 +364,7 @@
       symbolPath += 'C9.954,-26.789,3.083,-15.486,0.075,0z';
 
       pin.setAttribute('d', symbolPath);
-      pin.setAttribute('fill', '#E81E25');
+      pin.setAttribute('fill', options.locationIndicator.fill);
       pin.setAttribute('stroke', '#000000');
       pin.setAttribute('stroke-width', '3.7');
       pin.setAttribute('stroke-miterlimit', '10');
