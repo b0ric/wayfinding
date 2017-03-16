@@ -49,83 +49,90 @@
    */
 
   var defaults = {
-    /**
-     * @typedef map
-     * @memberOf wayfinding
-     * @type object
-     * @property {string} path relative URL to load the map from
-     * @property {string} id the identifier by which the map is referenced by other maps
-     */
-    'maps': [{'path': 'floorplan.svg', 'id': 'map.1'}],
-    /**
-     * @typedef path
-     * @memberOf wayfinding
-     * @typedef {object}
-     * @property {string} color any valid CSS color
-     * @property {integer} radius the turn ration in pixels to apply to the solution path
-     * @property {integer} speed the speed at which the solution path will be drawn
-     * @property {integer} width the width in pixels of the solution path
-     */
-    'path': {
-      color: 'red', // the color of the solution path that will be drawn
-      radius: 10, // the radius in pixels to apply to the solution path
-      speed: 8, // the speed at which the solution path with be drawn
-      width: 3 // the width of the solution path in pixels
+      /**
+       * @typedef map
+       * @memberOf wayfinding
+       * @type object
+       * @property {string} path relative URL to load the map from
+       * @property {string} id the identifier by which the map is referenced by other maps
+       */
+      'maps': [{'path': 'floorplan.svg', 'id': 'map.1'}],
+      /**
+       * @typedef path
+       * @memberOf wayfinding
+       * @typedef {object}
+       * @property {string} color any valid CSS color
+       * @property {integer} radius the turn ration in pixels to apply to the solution path
+       * @property {integer} speed the speed at which the solution path will be drawn
+       * @property {integer} width the width in pixels of the solution path
+       */
+      'path': {
+        color: 'red', // the color of the solution path that will be drawn
+        radius: 10, // the radius in pixels to apply to the solution path
+        speed: 8, // the speed at which the solution path with be drawn
+        width: 3 // the width of the solution path in pixels
+      },
+      // The point identifier for the default starting point
+      'startpoint': function () {
+        return 'startpoint';
+      },
+      // If specified in the wayfinding initialization
+      // route to this point as soon as the maps load. Can be initialized
+      // as a function or a string (for consistency with startpoint)
+      'endpoint': false,
+      'accessibleRoute': false, // Controls routing through paths/portals with data-accessible-route attribute
+      // Provides the identifier for the map that should be show at startup,
+      // if not given will default to showing first map in the array
+      'defaultMap': function () {
+        return 'map.1';
+      },
+      'loadMessage': 'Loading',
+      // should dataStoreCache should be used
+      // null is cache should not be used
+      // object if cache is being passed
+      // string representing url if it should be used
+      // string is URL path where filename to load will be in the form startpoint + '.json' or startpoint + '.acc.json'
+      'dataStoreCache': null,
+      'showLocation': false, // place marker for "you are here"
+      //styling for the "you are here pin"
+      'locationIndicator': {
+        startPin: {
+          fill: 'red',
+          letterFill: 'white',
+          height: 100
+        },
+        destinationPin: {
+          fill: 'blue',
+          letterFill: 'white',
+          height: 100
+        }
+      },
+      'pinchToZoom': false, // requires jquery.panzoom
+      'panzoom': {
+        'minScale': 1, // min zoom scale
+        'maxScale': 30, // max zoom scale
+        'viewboxScale': 1, // scale the viewbox when zooming
+        'contain': 'invert', // Indicate that the element should be contained within its parent when panning (https://github.com/timmywil/jquery.panzoom for more infos)
+        'cursor': 'pointer', // Default cursor style for the element
+        '$zoomIn': $(), // zoom in button jQuery object
+        '$zoomOut': $(), // zoom out button jQuery object
+        '$reset': $() // zoom reset button jQuery object
+      },
+      'zoomToRoute': false,
+      'zoomPadding': 25,
+      'autoChangeFloor': false, // change floor automatically or require a user's action
+      'changeFloorTrigger': '#change-floor', // selector of the trigger element
+      'floorChangeAnimationDelay': 1250, // milliseconds to wait during animation when a floor change occurs
+      // directions output
+      'directionsOutput': true,
+      'directionsContainer': '#directions', // selector of the directions container
+      'directionsClass': '', // class for the <ol> containing the directions
+      'directionsOlType': 'a', // Type of list element for the <ol>
+      'directionsLanguage': 'fr', // Language used for the textual directions.
+      'mapRatio': 7, // ratio used to calculate distances
     },
-    // The point identifier for the default starting point
-    'startpoint': function () {
-      return 'startpoint';
-    },
-    // If specified in the wayfinding initialization
-    // route to this point as soon as the maps load. Can be initialized
-    // as a function or a string (for consistency with startpoint)
-    'endpoint': false,
-    'accessibleRoute': false, // Controls routing through paths/portals with data-accessible-route attribute
-    // Provides the identifier for the map that should be show at startup,
-    // if not given will default to showing first map in the array
-    'defaultMap': function () {
-      return 'map.1';
-    },
-    'loadMessage': 'Loading',
-    // should dataStoreCache should be used
-    // null is cache should not be used
-    // object if cache is being passed
-    // string representing url if it should be used
-    // string is URL path where filename to load will be in the form startpoint + '.json' or startpoint + '.acc.json'
-    'dataStoreCache': null,
-    'showLocation': false, // place marker for "you are here"
-    //styling for the "you are here pin"
-    'locationIndicator': {
-      fill: 'red',
-      height: 40
-    },
-    'pinchToZoom': false, // requires jquery.panzoom
-    'panzoom': {
-      'minScale': 1, // min zoom scale
-      'maxScale': 30, // max zoom scale
-      'viewboxScale': 1, // scale the viewbox when zooming
-      'contain': 'invert', // Indicate that the element should be contained within its parent when panning (https://github.com/timmywil/jquery.panzoom for more infos)
-      'cursor': 'pointer', // Default cursor style for the element
-      '$zoomIn': $(), // zoom in button jQuery object
-      '$zoomOut': $(), // zoom out button jQuery object
-      '$reset': $() // zoom reset button jQuery object
-    },
-    'zoomToRoute': false,
-    'zoomPadding': 25,
-    'autoChangeFloor': false, // change floor automatically or require a user's action
-    'prevStepTrigger': '#prev-step', // selector of the previous step trigger element
-    'nextStepTrigger': '#next-step', // selector of the next step trigger element
-    'floorChangeAnimationDelay': 1250, // milliseconds to wait during animation when a floor change occurs
-    // directions output
-    'directionsOutput': true,
-    'directionsContainer': '#directions', // selector of the directions container
-    'directionsClass': '', // class for the <ol> containing the directions
-    'directionsOlType': 'a', // Type of list element for the <ol>
-    'directionsLanguage': 'fr', // Language used for the textual directions.
-    'mapRatio': 7, // ratio used to calculate distances
-  },
-  instructions,
-  dataStore;
+    instructions,
+    dataStore;
 
   // should array of arrays be looked into
   // should floor only be stored by id?
@@ -345,38 +352,35 @@
     {
       var indicator,
         pin,
-        circle,
-        height = options.locationIndicator.height, // add error checking?
-        symbolPath;
+        letter,
+        height = options.locationIndicator[type].height, // add error checking?
+        symbolPath,
+        letterPath;
 
       indicator = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
       $(indicator).attr('class', type);
 
       pin = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      letter = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
-      symbolPath = 'M0.075,0';
-      symbolPath += 'c-2.079-10.207-5.745-18.703-10.186-26.576c-3.295-5.84-7.111-11.23-10.642-16.894c-1.179-1.891-2.196-3.888-3.327-5.85';
-      symbolPath += 'c-2.266-3.924-4.102-8.472-3.984-14.372c0.113-5.766,1.781-10.391,4.186-14.172c3.954-6.219,10.578-11.317,19.465-12.657';
-      symbolPath += 'c7.268-1.095,14.08,0.756,18.911,3.58c3.948,2.31,7.005,5.394,9.329,9.027c2.426,3.793,4.096,8.274,4.236,14.12';
-      symbolPath += 'c0.072,2.995-0.418,5.769-1.109,8.069c-0.699,2.328-1.823,4.274-2.824,6.353c-1.953,4.06-4.4,7.777-6.857,11.498';
-      symbolPath += 'C9.954,-26.789,3.083,-15.486,0.075,0z';
+      symbolPath = 'M13.8,0C6.2,0,0,6.2,0,13.8c0,7.4,12.4,20.5,13,21.1l0.8,0.9l0.8-0.9c0.5-0.6,13-13.7,13-21.1C27.6,6.3,21.3,0.1,13.8,0z';
+      letterPath = {
+        startPin: 'M10.8,18.5L9,24H6.7l5.9-17.2h2.7L21.1,24h-2.4l-1.8-5.4H10.8z M16.4,16.8l-1.7-5c-0.4-1.1-0.6-2.1-0.9-3.1h-0.1c-0.3,1-0.5,2.1-0.9,3.1l-1.7,5H16.4z',
+        destinationPin: 'M8.5,6.7c1.1-0.2,2.8-0.4,4.5-0.4c2.5,0,4,0.4,5.2,1.4c1,0.7,1.6,1.9,1.6,3.4c0,1.8-1.2,3.4-3.2,4.2v0.1c1.8,0.5,3.9,1.9,3.9,4.8c0,1.6-0.6,2.9-1.6,3.8c-1.3,1.2-3.5,1.8-6.6,1.8c-1.7,0-3-0.1-3.8-0.2V6.7z M11,14.5h2.2c2.6,0,4.1-1.4,4.1-3.2c0-2.2-1.7-3.1-4.2-3.1c-1.1,0-1.8,0.1-2.2,0.2V14.5z M11,23.6c0.5,0.1,1.2,0.1,2.1,0.1c2.5,0,4.9-0.9,4.9-3.7c0-2.6-2.2-3.7-4.9-3.7h-2V23.6z'
+      };
 
       pin.setAttribute('d', symbolPath);
-      pin.setAttribute('fill', options.locationIndicator.fill);
-      pin.setAttribute('stroke', '#000000');
-      pin.setAttribute('stroke-width', '3.7');
-      pin.setAttribute('stroke-miterlimit', '10');
+      pin.setAttribute('fill', options.locationIndicator[type].fill);
 
-      circle.setAttribute('cx', '0');
-      circle.setAttribute('cy', '-63.757');
-      circle.setAttribute('r', '9.834');
+      letter.setAttribute('d', letterPath[type]);
+      letter.setAttribute('fill', options.locationIndicator[type].letterFill);
 
       indicator.appendChild(pin);
-      indicator.appendChild(circle);
+      indicator.appendChild(letter);
 
-      indicator.setAttribute('transform', 'translate(' + x + ' ' + (y - 10 * (height / 125)) + ') scale(' + height / 125 + ')');
+      var translate = 'translate(' + (x - (height / 9.1)) + ' ' + (y - (height / 3.37)) + ') scale(' + height / 125 + ')';
+      indicator.setAttribute('transform', translate);
 
       return indicator;
     } // end function makePin
@@ -777,6 +781,7 @@
         backTrack('pa', destinationmapNum, reversePathStart);
         solution.reverse();
       }
+
       return solution;
     } // end function getShortestRoute
 
@@ -919,7 +924,8 @@
       if (options.showLocation) {
         end = $('#Points #' + escapeSelector(endPoint), el);
 
-        attachPinLocation = $('svg').has('#Rooms a[id="' + escapeSelector(endPoint) + '"]');
+        attachPinLocation = $('svg').has('#Points #' + escapeSelector(endPoint));
+        console.log(attachPinLocation)
         if (end.length) {
           x = (Number(end.attr('cx')));
           y = (Number(end.attr('cy')));
@@ -1296,32 +1302,6 @@
         }
       }
 
-      function toggleStepsButtons()
-      {
-        var $prevStep = $(options.prevStepTrigger);
-        var $nextStep = $(options.nextStepTrigger);
-
-        if(drawing.length > 0) {
-          if(drawing[drawingSegment+1] !== undefined) {
-            $nextStep.prop('disabled', false);
-            $nextStep.on('click', function() {
-              floorChange();
-            });
-          } else {
-            $nextStep.prop('disabled', true);
-          }
-
-          if(drawing[drawingSegment-1] !== undefined) {
-            $prevStep.prop('disabled', false);
-            $prevStep.on('click', function() {
-              animatePath(drawingSegment-1);
-            });
-          } else {
-            $prevStep.prop('disabled', true);
-          }
-        }
-      }
-
       if (options.repeat && drawingSegment >= drawing.length) {
         // if repeat is set, then delay and rerun display from first.
         // Don't implement, until we have click to cancel out of this
@@ -1400,7 +1380,12 @@
         }, animationDuration + options.floorChangeAnimationDelay);
       } else {
         if(solution[0].floor !== solution[solution.length -1].floor) {
-          toggleStepsButtons()
+          var $trigger = $(options.changeFloorTrigger);
+          $trigger.show();
+          $trigger.on('click', function() {
+            floorChange();
+            $(this).hide();
+          });
         }
       }
 
@@ -1825,7 +1810,6 @@
           $.each(drawing, function (j, map) {
             var path = '',
               newPath;
-
             $.each(map, function (k, stroke) {
               switch (stroke.type) {
                 case 'M':
@@ -1868,6 +1852,7 @@
             thisPath = $('#' + maps[map[0].floor].id + ' svg .directionPath' + j);
 
             drawing[j].path = thisPath;
+
           });
 
           animatePath(0);

@@ -79,7 +79,7 @@ Use the `data-checkpoint` attribute to set a checkpoint in a path. Those checkpo
 |loadMessage|Loading|Message shown when maps are loading|
 |dataStoreCache|`null`||
 |showLocation|`false`|| 
-|locationIndicator|`{fill: 'red', height: 40 }`|Params for the location indicator pointer styles|
+|locationIndicator|`{ startPin: { fill: 'red', letterFill: 'white', height: 100 }, destinationPin: { fill: 'blue', letterFill: 'white', height: 100 }`|Params for the location indicator pointer styles|
 |pinchToZoom|`false`|Should pinch to zoom be activated (requires jquery.panzoom)|
 |zoomToRoute|`false`|Should zoom to route be activated (requires jquery.panzoom)|
 |panzoom|`{minScale: 1, maxScale: 30, viewboxScale: 1, contain: 'invert', cursor: 'pointer', $zoomIn: $(), $zoomOut: $(), $reset: $()}`|Params used for panzoom|

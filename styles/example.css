@@ -69,7 +69,7 @@ div#mapLoading {
 }
 
 g.startPin path {
-	fill: cyan;
+	/*fill: cyan;*/
 }
 
 g.destinationPin path {
