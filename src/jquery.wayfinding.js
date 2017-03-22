@@ -105,6 +105,11 @@
           fill: 'blue',
           letterFill: 'white',
           height: 100
+        },
+        locationPin: {
+          fill: 'green',
+          letterFill: 'white',
+          height: 100
         }
       },
       'pinchToZoom': false, // requires jquery.panzoom
@@ -121,7 +126,8 @@
       'zoomToRoute': false,
       'zoomPadding': 25,
       'autoChangeFloor': false, // change floor automatically or require a user's action
-      'changeFloorTrigger': '#change-floor', // selector of the trigger element
+      'prevStepTrigger': '#prev-step', // selector of the previous step trigger element
+      'nextStepTrigger': '#next-step', // selector of the next step trigger element
       'floorChangeAnimationDelay': 1250, // milliseconds to wait during animation when a floor change occurs
       // directions output
       'directionsOutput': true,
@@ -352,32 +358,45 @@
     {
       var indicator,
         pin,
-        letter,
+        pinContent,
         height = options.locationIndicator[type].height, // add error checking?
         symbolPath,
-        letterPath;
+        pinContentPath;
 
       indicator = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
       $(indicator).attr('class', type);
 
       pin = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      letter = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
       symbolPath = 'M13.8,0C6.2,0,0,6.2,0,13.8c0,7.4,12.4,20.5,13,21.1l0.8,0.9l0.8-0.9c0.5-0.6,13-13.7,13-21.1C27.6,6.3,21.3,0.1,13.8,0z';
-      letterPath = {
+      pinContentPath = {
         startPin: 'M10.8,18.5L9,24H6.7l5.9-17.2h2.7L21.1,24h-2.4l-1.8-5.4H10.8z M16.4,16.8l-1.7-5c-0.4-1.1-0.6-2.1-0.9-3.1h-0.1c-0.3,1-0.5,2.1-0.9,3.1l-1.7,5H16.4z',
-        destinationPin: 'M8.5,6.7c1.1-0.2,2.8-0.4,4.5-0.4c2.5,0,4,0.4,5.2,1.4c1,0.7,1.6,1.9,1.6,3.4c0,1.8-1.2,3.4-3.2,4.2v0.1c1.8,0.5,3.9,1.9,3.9,4.8c0,1.6-0.6,2.9-1.6,3.8c-1.3,1.2-3.5,1.8-6.6,1.8c-1.7,0-3-0.1-3.8-0.2V6.7z M11,14.5h2.2c2.6,0,4.1-1.4,4.1-3.2c0-2.2-1.7-3.1-4.2-3.1c-1.1,0-1.8,0.1-2.2,0.2V14.5z M11,23.6c0.5,0.1,1.2,0.1,2.1,0.1c2.5,0,4.9-0.9,4.9-3.7c0-2.6-2.2-3.7-4.9-3.7h-2V23.6z'
+        destinationPin: 'M8.5,6.7c1.1-0.2,2.8-0.4,4.5-0.4c2.5,0,4,0.4,5.2,1.4c1,0.7,1.6,1.9,1.6,3.4c0,1.8-1.2,3.4-3.2,4.2v0.1c1.8,0.5,3.9,1.9,3.9,4.8c0,1.6-0.6,2.9-1.6,3.8c-1.3,1.2-3.5,1.8-6.6,1.8c-1.7,0-3-0.1-3.8-0.2V6.7z M11,14.5h2.2c2.6,0,4.1-1.4,4.1-3.2c0-2.2-1.7-3.1-4.2-3.1c-1.1,0-1.8,0.1-2.2,0.2V14.5z M11,23.6c0.5,0.1,1.2,0.1,2.1,0.1c2.5,0,4.9-0.9,4.9-3.7c0-2.6-2.2-3.7-4.9-3.7h-2V23.6z',
+        locationPin: 'M827.42,300.94  c-1.971,0-3.566-1.596-3.566-3.565s1.596-3.565,3.566-3.565c1.969,0,3.564,1.596,3.564,3.565S829.389,300.94,827.42,300.94z'
       };
 
       pin.setAttribute('d', symbolPath);
       pin.setAttribute('fill', options.locationIndicator[type].fill);
 
-      letter.setAttribute('d', letterPath[type]);
-      letter.setAttribute('fill', options.locationIndicator[type].letterFill);
-
       indicator.appendChild(pin);
-      indicator.appendChild(letter);
+
+      if(type !== 'locationPin') {
+        pinContent = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        pinContent.setAttribute('d', pinContentPath[type]);
+        pinContent.setAttribute('fill', options.locationIndicator[type].letterFill);
+
+        indicator.appendChild(pinContent);
+      } else {
+        pinContent = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pinContent.setAttribute('cx', 13.8);
+        pinContent.setAttribute('cy', 13);
+        pinContent.setAttribute('r', 6);
+        pinContent.setAttribute('fill', options.locationIndicator[type].letterFill);
+
+        indicator.appendChild(pinContent);
+      }
+
 
       var translate = 'translate(' + (x - (height / 9.1)) + ' ' + (y - (height / 3.37)) + ') scale(' + height / 125 + ')';
       indicator.setAttribute('transform', translate);
@@ -781,7 +800,6 @@
         backTrack('pa', destinationmapNum, reversePathStart);
         solution.reverse();
       }
-
       return solution;
     } // end function getShortestRoute
 
@@ -925,7 +943,6 @@
         end = $('#Points #' + escapeSelector(endPoint), el);
 
         attachPinLocation = $('svg').has('#Points #' + escapeSelector(endPoint));
-        console.log(attachPinLocation)
         if (end.length) {
           x = (Number(end.attr('cx')));
           y = (Number(end.attr('cy')));
@@ -938,6 +955,33 @@
         }
       }
     } //end function setEndPoint
+
+    /**
+     *
+     * @param endPoint
+     * @param el
+     */
+    function setLocation(destination, el)
+    {
+      var end, attachPinLocation,
+        x, y, pin;
+
+      //clears locationIndicators from the maps
+      $('g.locationPin', el).remove();
+      end = $('#Points #' + escapeSelector(destination), el);
+
+      attachPinLocation = $('svg').has('#Points #' + escapeSelector(destination));
+      if (end.length) {
+        x = (Number(end.attr('cx')));
+        y = (Number(end.attr('cy')));
+
+        pin = makePin(x, y, 'locationPin');
+
+        attachPinLocation.append(pin);
+      } else {
+        return; //end point does not exist
+      }
+    } //end function setLocation
 
     /**
      * Set options based on either provided options or defaults
@@ -1302,6 +1346,32 @@
         }
       }
 
+      function toggleStepsButtons()
+      {
+        var $prevStep = $(options.prevStepTrigger);
+        var $nextStep = $(options.nextStepTrigger);
+
+        if(drawing.length > 0) {
+          if(drawing[drawingSegment+1] !== undefined) {
+            $nextStep.prop('disabled', false);
+            $nextStep.on('click', function() {
+              floorChange();
+            });
+          } else {
+            $nextStep.prop('disabled', true);
+          }
+
+          if(drawing[drawingSegment-1] !== undefined) {
+            $prevStep.prop('disabled', false);
+            $prevStep.on('click', function() {
+              animatePath(drawingSegment-1);
+            });
+          } else {
+            $prevStep.prop('disabled', true);
+          }
+        }
+      }
+
       if (options.repeat && drawingSegment >= drawing.length) {
         // if repeat is set, then delay and rerun display from first.
         // Don't implement, until we have click to cancel out of this
@@ -1380,12 +1450,7 @@
         }, animationDuration + options.floorChangeAnimationDelay);
       } else {
         if(solution[0].floor !== solution[solution.length -1].floor) {
-          var $trigger = $(options.changeFloorTrigger);
-          $trigger.show();
-          $trigger.on('click', function() {
-            floorChange();
-            $(this).hide();
-          });
+          toggleStepsButtons()
         }
       }
 
@@ -1810,6 +1875,7 @@
           $.each(drawing, function (j, map) {
             var path = '',
               newPath;
+
             $.each(map, function (k, stroke) {
               switch (stroke.type) {
                 case 'M':
@@ -1852,7 +1918,6 @@
             thisPath = $('#' + maps[map[0].floor].id + ' svg .directionPath' + j);
 
             drawing[j].path = thisPath;
-
           });
 
           animatePath(0);
@@ -2046,6 +2111,19 @@
           case 'routeTo':
             // call method
             routeTo(passed, obj);
+            break;
+
+          /**
+           * @function findPoint
+           * @name findPoint
+           * @public
+           * @memberOf wayfinding
+           * @example $('target').wayfinding('findPoint', 'pointID');
+           */
+          case 'findPoint':
+            // call method
+            switchFloor($("#"+passed).parents('div').prop('id'), obj);
+            setLocation(passed, obj);
             break;
 
           /**
