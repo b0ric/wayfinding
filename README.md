@@ -79,7 +79,7 @@ Use the `data-checkpoint` attribute to set a checkpoint in a path. Those checkpo
 |loadMessage|Loading|Message shown when maps are loading|
 |dataStoreCache|`null`||
 |showLocation|`false`|| 
-|locationIndicator|`{ startPin: { fill: 'red', letterFill: 'white', height: 100 }, destinationPin: { fill: 'blue', letterFill: 'white', height: 100 }`|Params for the location indicator pointer styles|
+|locationIndicator|`{ startPin: { fill: 'red', letterFill: 'white', height: 100 }, destinationPin: { fill: 'blue', letterFill: 'white', height: 100 }, locationPin: { fill: 'green', letterFill: 'white', height: 100 } }`|Params for the location indicator pointer styles|
 |pinchToZoom|`false`|Should pinch to zoom be activated (requires jquery.panzoom)|
 |zoomToRoute|`false`|Should zoom to route be activated (requires jquery.panzoom)|
 |panzoom|`{minScale: 1, maxScale: 30, viewboxScale: 1, contain: 'invert', cursor: 'pointer', $zoomIn: $(), $zoomOut: $(), $reset: $()}`|Params used for panzoom|
@@ -100,6 +100,15 @@ Use the `data-checkpoint` attribute to set a checkpoint in a path. Those checkpo
 |directionsLanguage|`en`|Language used for the textual directions.|
 |mapRatio|7|Ratio for the map, used to calculate distances for textual directions|
 
+### Events
+
+|Event name|Description|
+|---|---|
+|routeTo|Show the path between two points|
+|findPoint|Show a point on the map|
+|startpoint|Set the starting point|
+|currentMap|Set the current map|
+|accessibleRoute|Set the accessible route param|
 
 ### SVG attributes
 
