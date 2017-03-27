@@ -1901,7 +1901,7 @@
             }
 
             // Attach the newpath to the startpin or endpin if they exist on this floor
-            var attachPointSvg = $('#' + maps[map[0].floor].id + ' svg');
+            var attachPointSvg = $('#' + maps[map[0].floor].id + ' svg #Route');
             var startPin = $('.startPin', attachPointSvg);
             var destinationPin = $('.destinationPin', attachPointSvg);
 

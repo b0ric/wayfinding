@@ -16,6 +16,16 @@ Wrapper for the background image of the map
 </g>
 ```
 
+### Route
+
+Wrapper where the route path will be added.
+
+```
+<g id="Route">
+	Found route will be added here...
+</g>
+```
+
 ### Portals
 
 Their id needs to be created using a specific format (ex: Elev.1.floor3). 
